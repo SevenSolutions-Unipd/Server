@@ -1,0 +1,28 @@
+/* Alternate the background color of the output rows */
+.list-group-item:nth-child(even) {
+    background-color: #bdf1ac;
+}
+
+.chat-log {
+    height:300px;
+    overflow-y: scroll;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+li {
+    padding: 1px;
+    margin-bottom: 10px !important;
+    width: 75%;
+    border-radius: 10px;
+}
+
+.left {
+
+}
+
+.right {
+    margin-left: 25%;
+}

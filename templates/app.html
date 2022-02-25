@@ -1,0 +1,140 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Imola Informatica ChatBot</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+      <link rel="icon" href="{% static 'favicon.ico' %}"/>
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="jumbotron mt-1">
+        <h1 class="jumbotron-heading text-xs-center">Imola Informatica Chatbot</h1>
+        <p class="lead text-xs-center">
+          Chat with me! ;)
+        </p>
+
+        <hr class="my-2">
+
+        <div class="row">
+          <div class="col-xs-6 offset-xs-3">
+            <ul class="list-group chat-log js-chat-log">
+            </ul>
+
+            <div class="input-group input-group-lg mt-1">
+              <input type="text" class="form-control js-text" placeholder="Messaggio"/>
+              <span class="input-group-btn">
+                <button class="btn btn-primary js-say">Submit</button>
+              </span>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    
+    {% csrf_token %}
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script>
+      var chatterbotUrl = '{% url "chatterbot" %}';
+      {#var csrftoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;#}
+
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE|POST)$/.test(method));
+      }
+
+
+
+      var $chatlog = $('.js-chat-log');
+      var $input = $('.js-text');
+      var $sayButton = $('.js-say');
+
+      function createRow(text, side) {
+        var $row = $('<li class="list-group-item '+ side + '"></li>');
+        var $pre = $('<pre></pre>');
+        $pre.text(text)
+
+        $row.append($pre);
+        $chatlog.append($row);
+      }
+
+      function getFirstMessage() {
+          var $submit = $.ajax({
+            type: 'GET',
+            url: chatterbotUrl,
+            contentType: 'application/json'
+            });
+
+        $submit.done(function(statement) {
+            createRow(statement.text);
+
+            // Clear the input field
+            $input.val('');
+
+            // Scroll to the bottom of the chat interface
+            $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
+        });
+
+        $submit.fail(function() {
+          // TODO: Handle errors
+        });
+      }
+
+      function submitInput() {
+        var inputData = {
+          'text': $input.val()
+        }
+
+        // Display the user's input on the web page
+        createRow(inputData.text, "right");
+
+        var $submit = $.ajax({
+          type: 'POST',
+          url: chatterbotUrl,
+          data: JSON.stringify(inputData),
+            headers: {"Authorization": "d7918028-8a60-4138-8319-a29b7d75c647"},
+          contentType: 'application/json'
+        });
+
+        $submit.done(function(statement) {
+            createRow(statement.text, "left");
+
+            // Clear the input field
+            $input.val('');
+
+            // Scroll to the bottom of the chat interface
+            $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
+        });
+
+        $submit.fail(function() {
+          // TODO: Handle errors
+        });
+      }
+
+      $sayButton.click(function() {
+        submitInput();
+      });
+
+      $input.keydown(function(event) {
+              // Submit the input when the enter button is pressed
+              if (event.keyCode == 13) {
+                  submitInput();
+              }
+          }
+      );
+
+      $(document).ready(function () {
+          getFirstMessage();
+          $input.focus()
+      });
+    </script>
+  </body>
+</html>
