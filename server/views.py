@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.http import JsonResponse
-from server.utils.ChatterBotApiKey import ChatterBotApiKey
+from server.utils.chatterbot_apikey import ChatterBotApiKey
 from chatterbot.ext.django_chatterbot import settings
 
 

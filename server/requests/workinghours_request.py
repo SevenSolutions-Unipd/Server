@@ -1,6 +1,6 @@
 from requests import Response
 
-from server.requests.requestInterface import RequestInterface
+from server.requests.request_interface import RequestInterface
 from datetime import datetime
 import re
 
@@ -9,6 +9,8 @@ from server.utils import utils
 
 class WorkingHoursRequest(RequestInterface):
     responseProjectMissing = "A quale progetto ti stai riferendo?"
+    responseProjectNotFound = "Il progetto che hai cercato non esiste"
+    responseUnauthorized = "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
 
     def __init__(self):
         self.isQuitting = False
@@ -77,6 +79,6 @@ class WorkingHoursRequest(RequestInterface):
 
             return strReturn
         elif response.status_code == 401:
-            return "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
+            return self.responseUnauthorized
         else:
-            return "Il progetto che hai cercato non esiste"
+            return self.responseProjectNotFound

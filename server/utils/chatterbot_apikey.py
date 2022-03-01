@@ -1,5 +1,5 @@
 from chatterbot.chatterbot import ChatBot
-from server.utils.StatementApiKey import StatementApiKey
+from server.utils.statement_apikey import StatementApiKey
 
 
 class ChatterBotApiKey(ChatBot):
@@ -7,7 +7,7 @@ class ChatterBotApiKey(ChatBot):
     def __init__(self, name, **kwargs):
         super(ChatterBotApiKey, self).__init__(name, **kwargs)
 
-    def get_response(self, apiKey, statement=None, **kwargs):
+    def get_response(self, apiKey=None, statement=None, **kwargs):
 
         Statement = self.storage.get_object('statement')
 

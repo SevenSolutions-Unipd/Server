@@ -1,7 +1,7 @@
 from chatterbot.conversation import Statement
 from chatterbot.logic import LogicAdapter
-from server.utils.StatementApiKey import StatementApiKey
-from server.requests.workingHoursRequest import WorkingHoursRequest
+from server.utils.statement_apikey import StatementApiKey
+from server.requests.workinghours_request import WorkingHoursRequest
 from server.utils.utils import lev_dist
 import requests
 
