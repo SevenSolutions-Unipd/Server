@@ -21,7 +21,6 @@ STATICFILES_DIRS = (
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -66,15 +65,19 @@ CHATTERBOT = {
     'name': 'Imola Informatica ChatBot',
     'django_app_name': 'django_chatterbot',
     'logic_adapters': [{
-            'import_path': 'server.adapters.working_hours_adapter.WorkingHoursAdapter'
-        },
+        'import_path': 'server.adapters.working_hours_adapter.WorkingHoursAdapter'
+    },
         {
             'import_path': 'server.adapters.help_adapter.HelpAdapter'
         },
         {
             'import_path': 'server.adapters.msg_notrecognizable_adapter.MessageNotRecognizableAdapter'
         }
-    ]
+    ],
+    'storage_adapter': {
+        'import_path': 'chatterbot.storage.SQLStorageAdapter',
+        'read_only': 'True'
+    }
 }
 
 ROOT_URLCONF = 'server.urls'
@@ -98,7 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -108,7 +110,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -139,7 +140,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

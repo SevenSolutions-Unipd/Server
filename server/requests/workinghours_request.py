@@ -58,7 +58,7 @@ class WorkingHoursRequest(RequestInterface):
     def checkQuitting(self, text: str) -> bool:
         quitWords = ['annulla', 'elimina', 'rimuovi']
         self.isQuitting = True
-        return any(text.lower().find(check) > -1 for check in quitWords)
+        return any(text.lower().find(check) > -1 for check in quitWords) # DA SISTEMARE CON LEV_DIST
 
     def isReady(self) -> bool:
         if self.project is not None:

@@ -1,15 +1,42 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="it">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Imola Informatica ChatBot</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
-      <link rel="icon" href="{% static 'favicon.ico' %}"/>
-  </head>
-  <body>
-    <div class="container">
+    <link rel="icon" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Autenticazione richiesta</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+            Sembra che tu non sia ancora autenticato!<br>
+              Per favore effettua il login su <a href="https://google.com" target="_blank">Imola Informatica</a> ed inserisci la chiave di accesso!
+            </p>
 
+            <div class="input-group">
+              <input type="text" class="form-control" id="apiKeyVal" placeholder="Chiave di accesso" aria-label="Chiave di accesso">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+            <button type="button" class="btn btn-primary" id="saveApiKeyButton">Salva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
       <div class="jumbotron mt-1">
         <h1 class="jumbotron-heading text-xs-center">Imola Informatica Chatbot</h1>
         <p class="lead text-xs-center">
@@ -29,51 +56,50 @@
                 <button class="btn btn-primary js-say">Submit</button>
               </span>
             </div>
-            
+
           </div>
         </div>
 
       </div>
 
     </div>
-    
+
     {% csrf_token %}
 
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/js.cookie.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script>
-      var chatterbotUrl = '{% url "chatterbot" %}';
-      {#var csrftoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;#}
+        const chatterbotUrl = '{% url "chatterbot" %}';
+        {#var csrftoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;#}
 
       function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE|POST)$/.test(method));
       }
 
-
-
-      var $chatlog = $('.js-chat-log');
-      var $input = $('.js-text');
-      var $sayButton = $('.js-say');
+      const $chatlog = $('.js-chat-log');
+      const $input = $('.js-text');
+      const $sayButton = $('.js-say');
+      const $saveApiKeyButton = $('#saveApiKeyButton');
 
       function createRow(text, side) {
-        var $row = $('<li class="list-group-item '+ side + '"></li>');
-        var $pre = $('<pre></pre>');
-        $pre.text(text)
+          const $row = $('<li class="list-group-item ' + side + '"></li>');
+          const $pre = $('<pre></pre>');
+          $pre.text(text)
 
         $row.append($pre);
         $chatlog.append($row);
       }
 
       function getFirstMessage() {
-          var $submit = $.ajax({
-            type: 'GET',
-            url: chatterbotUrl,
-            contentType: 'application/json'
-            });
+          const $submit = $.ajax({
+              type: 'GET',
+              url: chatterbotUrl,
+              contentType: 'application/json'
+          });
 
-        $submit.done(function(statement) {
+          $submit.done(function(statement) {
             createRow(statement.text);
 
             // Clear the input field
@@ -89,22 +115,22 @@
       }
 
       function submitInput() {
-        var inputData = {
-          'text': $input.val()
-        }
+          const inputData = {
+              'text': $input.val()
+          };
 
-        // Display the user's input on the web page
+          // Display the user's input on the web page
         createRow(inputData.text, "right");
 
-        var $submit = $.ajax({
-          type: 'POST',
-          url: chatterbotUrl,
-          data: JSON.stringify(inputData),
-            headers: {"Authorization": "d7918028-8a60-4138-8319-a29b7d75c647"},
-          contentType: 'application/json'
-        });
+          const $submit = $.ajax({
+              type: 'POST',
+              url: chatterbotUrl,
+              data: JSON.stringify(inputData),
+              headers: {"Authorization": localStorage.getItem('apiKey')},
+              contentType: 'application/json'
+          });
 
-        $submit.done(function(statement) {
+          $submit.done(function(statement) {
             createRow(statement.text, "left");
 
             // Clear the input field
@@ -120,20 +146,32 @@
       }
 
       $sayButton.click(function() {
-        submitInput();
+          if($input.val().length === 0)
+              $input.focus();
+          else
+            submitInput();
+      });
+
+      $saveApiKeyButton.click(function () {
+         localStorage.setItem("apiKey",$('#apiKeyVal').val());
       });
 
       $input.keydown(function(event) {
               // Submit the input when the enter button is pressed
-              if (event.keyCode == 13) {
+              if (event.keyCode === 13 && $input.val().length > 0) {
                   submitInput();
+              } else {
+                  $input.focus();
               }
           }
       );
 
       $(document).ready(function () {
+          if(localStorage.getItem("apiKey") === null)
+              $('#exampleModalCenter').modal('show');
+
           getFirstMessage();
-          $input.focus()
+          $input.focus();
       });
     </script>
   </body>
