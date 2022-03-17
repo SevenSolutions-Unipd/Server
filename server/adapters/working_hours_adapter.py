@@ -15,7 +15,7 @@ class WorkingHoursAdapter(LogicAdapter):
         self.apiKey = None
 
     def can_process(self, statement):
-        if self.adapter is not None:
+        if self.adapter == "WorkingHoursAdapter":
             return True
 
         hoursWords = ['ore']
@@ -67,6 +67,6 @@ class WorkingHoursAdapter(LogicAdapter):
                 self.prev_statement = None
 
             response_statement = Statement(response)
-            # response_statement.confidence = 0.1
+            # response_statement.confidence = 1
 
         return response_statement

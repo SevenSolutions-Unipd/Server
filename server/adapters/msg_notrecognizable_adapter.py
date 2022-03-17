@@ -13,3 +13,4 @@ class MessageNotRecognizableAdapter(LogicAdapter):
 
     def process(self, input_statement, additional_response_selection_parameters):
         return Statement(self.notRecognizableMessage)
+#     confidence = 0.5

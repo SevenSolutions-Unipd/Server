@@ -66,7 +66,7 @@ CHATTERBOT = {
     'django_app_name': 'django_chatterbot',
     'logic_adapters': [{
         'import_path': 'server.adapters.working_hours_adapter.WorkingHoursAdapter'
-    },
+        },
         {
             'import_path': 'server.adapters.help_adapter.HelpAdapter'
         },
