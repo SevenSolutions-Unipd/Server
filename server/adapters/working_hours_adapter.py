@@ -45,7 +45,8 @@ class WorkingHoursAdapter(LogicAdapter):
             if request.toDate is not None:
                 params['to'] = request.toDate
 
-            responseUrl = requests.get(url, headers={"api_key": "d7918028-8a60-4138-8319-a29b7d75c647"}, params=params)
+            apiKey = kwargs.pop("api_key")
+            responseUrl = requests.get(url, headers={"api_key": apiKey}, params=params)
 
             response_statement = WorkingHoursStatement(
                 request.parseResult(responseUrl),

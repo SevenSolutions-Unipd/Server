@@ -35,13 +35,13 @@ class ChatterBotApiView(View):
                 ]
             }, status=400)
 
-        if request.headers["Authorization"] is not None:
-            apiKey = request.headers["Authorization"]
-        else:
-            apiKey = None
-
         if not request.session.session_key:
             request.session.create()
+
+        if request.headers["Authorization"] is not None:
+            request.session["api_key"] = request.headers["Authorization"]
+        else:
+            request.session["api_key"] = None
 
         response = self.bot.getResponse(request.session, input_data)
         response_data = response.serialize()

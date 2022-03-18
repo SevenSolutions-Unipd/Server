@@ -19,24 +19,27 @@ class ChatBotAdapter:
 
         text = kwargs.pop('text')
         input_statement = Statement(text=text, **kwargs)
-
         kwargs.clear()
 
         if "adapter" in session:
             # request processing already started
             kwargs = session.get("statement")
+            kwargs["api_key"] = session["api_key"]
+
             input_statement.in_response_to = kwargs.pop("text")
 
             for adapter in self.chatterbot.logic_adapters:
                 if adapter.class_name == session.get("adapter"):
                     result = adapter.process(input_statement, None, **kwargs)
         else:
+            # new request
             result = None
             max_confidence = -1
+            kwargs["api_key"] = session["api_key"]
 
             for adapter in self.chatterbot.logic_adapters:
                 if adapter.can_process(input_statement):
-                    output = adapter.process(input_statement)
+                    output = adapter.process(input_statement, None, **kwargs)
 
                     if output.confidence > max_confidence:
                         session["adapter"] = adapter.class_name

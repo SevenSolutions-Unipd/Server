@@ -1,16 +1,15 @@
 from requests import Response
 
-from server.requests.request_interface import RequestInterface
+from server.requests.abstract_request import AbstractRequest
 from datetime import datetime
 import re
 
 from server.utils import utils
 
 
-class WorkingHoursRequest(RequestInterface):
+class WorkingHoursRequest(AbstractRequest):
     responseProjectMissing = "A quale progetto ti stai riferendo?"
     responseProjectNotFound = "Il progetto che hai cercato non esiste"
-    responseUnauthorized = "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
 
     def __init__(self, project=None, fromDate=None, toDate=None):
         self.isQuitting = False
@@ -27,6 +26,7 @@ class WorkingHoursRequest(RequestInterface):
                 match = re.search(typo, input_statement, re.IGNORECASE).group()
 
                 if sanitizedWords.index(match) + 1 < len(sanitizedWords):
+                    # TODO: project syntax validation (forse già fatta sopra?)
                     self.project = sanitizedWords[sanitizedWords.index(match) + 1]
                 else:
                     return self.responseProjectMissing
@@ -34,17 +34,9 @@ class WorkingHoursRequest(RequestInterface):
                 for i in range(len(sanitizedWords)):
                     sanitizedWords[i] = sanitizedWords[i].lower()
 
-                if utils.lev_dist(sanitizedWords, ['dal']):
-                    typo = utils.lev_dist_str(sanitizedWords, ['dal'])
-                    self.fromDate = datetime \
-                        .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y') \
-                        .strftime('%Y-%m-%d')
+                self.fromDate = self.extractDate(sanitizedWords, ['dal'])
+                self.toDate = self.extractDate(sanitizedWords, ['al'])
 
-                    if utils.lev_dist(sanitizedWords, ['al']):
-                        typo = utils.lev_dist_str(sanitizedWords, ['al'])
-                        self.toDate = datetime \
-                            .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y') \
-                            .strftime('%Y-%m-%d')
             else:
                 return self.responseProjectMissing
         else:
@@ -52,13 +44,9 @@ class WorkingHoursRequest(RequestInterface):
                 return "Richiesta annullata!"
 
             if prev_statement == self.responseProjectMissing:
+                # TODO: validation on project syntax
                 self.project = input_statement
                 return "Eseguo azione!"
-
-    def checkQuitting(self, text: str) -> bool:
-        quitWords = ['annulla', 'elimina', 'rimuovi']
-        self.isQuitting = True
-        return any(text.lower().find(check) > -1 for check in quitWords)  # DA SISTEMARE CON LEV_DIST
 
     def isReady(self) -> bool:
         if self.project is not None:
@@ -80,5 +68,22 @@ class WorkingHoursRequest(RequestInterface):
             return strReturn
         elif response.status_code == 401:
             return self.responseUnauthorized
-        else:
+        elif response.status_code == 404:
             return self.responseProjectNotFound
+        else:
+            return self.responseBad
+
+    # UTILITY METHODS
+    def extractDate(self, words: list, flags: list) -> str:
+        if utils.lev_dist(words, flags):
+            typo = utils.lev_dist_str(words, flags)
+
+            if words.index(typo) + 1 < len(words):
+                try:
+                    return datetime \
+                        .strptime(words[words.index(typo) + 1], '%d/%m/%Y') \
+                        .strftime('%Y-%m-%d')
+                except ValueError:
+                    return None
+
+        return None
