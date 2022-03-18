@@ -71,6 +71,12 @@ CHATTERBOT = {
             'import_path': 'server.adapters.help_adapter.HelpAdapter'
         },
         {
+            'import_path': 'server.adapters.check_in_adapter.CheckInAdapter'
+        },
+        {
+            'import_path': 'server.adapters.check_out_adapter.CheckOutAdapter'
+        },
+        {
             'import_path': 'server.adapters.msg_notrecognizable_adapter.MessageNotRecognizableAdapter'
         }
     ],
