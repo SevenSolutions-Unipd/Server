@@ -49,17 +49,11 @@ class CheckRequest(RequestInterface):
             return True
         return False
 
-    def controlCheckOut(self, response:Response) -> str:
-        #if response.status_code == 200:
-        record = response.json()
-        location = record.get('location', "none")
-        if location == "none":
-            return "Non è stato effettuato alcun check-In, non è possibile effettuare il check-out."
-        else:
-            return "ok"
-        #elif response.status_code == 401:
-        #    return "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
-
+    def controlCheckIn(self, response:Response) -> str:
+        if response.status_code == 200:
+            for record in response.json():
+                location = record.get('location', "")
+            return location
 
     def parseResult(self, response: Response) -> str:
         if response.status_code == 201:

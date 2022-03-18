@@ -33,6 +33,14 @@ class CheckInAdapter(LogicAdapter):
         if isinstance(input_statement, StatementApiKey) and input_statement.apiKey is not None:
             self.apiKey = input_statement.apiKey
 
+        presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
+        response_presence_url = requests.get(presence_url, headers={"api_key": self.apiKey})
+        response_statement = Statement(self.request.controlCheckIn(response_presence_url))
+
+#commentato perche sempre attivo con le api fornite
+#        if response_statement != "":
+#            return Statement("hai già fatto il check-in nella sede: "+response_statement.text)
+
         response = self.request.parseUserInput(input_statement.text, self.prev_statement)
         self.prev_statement = response
 

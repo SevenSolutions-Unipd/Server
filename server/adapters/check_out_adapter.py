@@ -33,19 +33,19 @@ class CheckOutAdapter(LogicAdapter):
         if isinstance(input_statement, StatementApiKey) and input_statement.apiKey is not None:
             self.apiKey = input_statement.apiKey
 
+        presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
+        response_presence_url = requests.get(presence_url, headers={"api_key": self.apiKey})
+        response_statement = Statement(self.request.controlCheckIn(response_presence_url))
+
+        if response_statement == "":
+            return Statement("non sei loggato in nessuna sede")
+
+
         response = self.request.parseUserInput(input_statement.text, self.prev_statement)
         self.prev_statement = response
 
         if self.request.isReady():
             url = "https://apibot4me.imolinfo.it/v1/locations/" + self.request.location + "/presence"
-
-
-            #presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
-            #response_presence_url = requests.get(presence_url, headers={"api_key": self.apiKey})
-            #response_statement = Statement(self.request.controlCheckOut(response_presence_url))
-
-            #if response_statement != "ok":
-            #    return response_statement
 
             response_url = requests.delete(url, headers={"api_key": self.apiKey})
 
