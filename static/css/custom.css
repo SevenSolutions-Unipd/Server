@@ -4,7 +4,7 @@
 }
 
 .chat-log {
-    height:300px;
+    height: 300px;
     overflow-y: scroll;
 }
 
@@ -24,6 +24,16 @@ li {
 
 .right {
     margin-left: 25%;
+}
+
+@media only screen and (max-width: 600px) {
+    html, body {
+        height: 100%;
+    }
+
+    .chat-log {
+        height: 100%;
+    }
 }
 
 

@@ -1,5 +1,6 @@
 from chatterbot.conversation import Statement
 from chatterbot.logic import LogicAdapter
+from server.statements.request_statement import RequestStatement
 from server.utils.utils import lev_dist
 import re
 
@@ -26,8 +27,8 @@ class HelpAdapter(LogicAdapter):
 
         return True
 
-    def process(self, input_statement, additional_response_selection_parameters):
-        response_statement = Statement(self.helpResponse)
-        # response_statement.confidence = 0.1
+    def process(self, statement, additional_response_selection_parameters=None, **kwargs):
+        response_statement = RequestStatement(self.helpResponse, statement.text, True)
+        response_statement.confidence = 0.5
 
         return response_statement

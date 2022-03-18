@@ -12,11 +12,11 @@ class WorkingHoursRequest(RequestInterface):
     responseProjectNotFound = "Il progetto che hai cercato non esiste"
     responseUnauthorized = "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
 
-    def __init__(self):
+    def __init__(self, project=None, fromDate=None, toDate=None):
         self.isQuitting = False
-        self.project = None
-        self.fromdate = None
-        self.todate = None
+        self.project = project
+        self.fromDate = fromDate
+        self.toDate = toDate
 
     def parseUserInput(self, input_statement: str, prev_statement: str) -> str:
         if prev_statement is None:
@@ -36,14 +36,14 @@ class WorkingHoursRequest(RequestInterface):
 
                 if utils.lev_dist(sanitizedWords, ['dal']):
                     typo = utils.lev_dist_str(sanitizedWords, ['dal'])
-                    self.fromdate = datetime\
-                        .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y')\
+                    self.fromDate = datetime \
+                        .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y') \
                         .strftime('%Y-%m-%d')
 
                     if utils.lev_dist(sanitizedWords, ['al']):
                         typo = utils.lev_dist_str(sanitizedWords, ['al'])
-                        self.todate = datetime\
-                            .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y')\
+                        self.toDate = datetime \
+                            .strptime(sanitizedWords[sanitizedWords.index(typo) + 1], '%d/%m/%Y') \
                             .strftime('%Y-%m-%d')
             else:
                 return self.responseProjectMissing
@@ -58,7 +58,7 @@ class WorkingHoursRequest(RequestInterface):
     def checkQuitting(self, text: str) -> bool:
         quitWords = ['annulla', 'elimina', 'rimuovi']
         self.isQuitting = True
-        return any(text.lower().find(check) > -1 for check in quitWords) # DA SISTEMARE CON LEV_DIST
+        return any(text.lower().find(check) > -1 for check in quitWords)  # DA SISTEMARE CON LEV_DIST
 
     def isReady(self) -> bool:
         if self.project is not None:
