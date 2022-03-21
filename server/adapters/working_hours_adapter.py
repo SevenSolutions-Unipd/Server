@@ -24,14 +24,11 @@ class WorkingHoursAdapter(LogicAdapter):
 
     def process(self, statement, additional_response_selection_parameters=None, **kwargs):
 
-        if "project" in kwargs:
-            request = WorkingHoursRequest(
-                kwargs.pop("project"),
-                kwargs.pop("fromDate"),
-                kwargs.pop("toDate")
-            )
-        else:
-            request = WorkingHoursRequest()
+        request = WorkingHoursRequest(
+            kwargs.get("project", None),
+            kwargs.get("fromDate", None),
+            kwargs.get("toDate", None)
+        )
 
         response = request.parseUserInput(statement.text, statement.in_response_to)
 
@@ -45,24 +42,21 @@ class WorkingHoursAdapter(LogicAdapter):
             if request.toDate is not None:
                 params['to'] = request.toDate
 
-            apiKey = kwargs.pop("api_key")
-            responseUrl = requests.get(url, headers={"api_key": apiKey}, params=params)
+            apiKey = kwargs.get("api_key")
+            serviceResponse = requests.get(url, headers={"api_key": apiKey}, params=params)
 
-            response_statement = WorkingHoursStatement(
-                request.parseResult(responseUrl),
-                True,
-                request.project,
-                request.fromDate,
-                request.toDate
-            )
+            response = request.parseResult(serviceResponse)
+            isRequestProcessed = True
         else:
-            response_statement = WorkingHoursStatement(
-                response,
-                statement.text,
-                False,
-                request.project,
-                request.fromDate,
-                request.toDate)
+            isRequestProcessed = True if request.isQuitting else False
+
+        response_statement = WorkingHoursStatement(
+            response,
+            statement.text,
+            isRequestProcessed,
+            request.project,
+            request.fromDate,
+            request.toDate)
 
         response_statement.confidence = 1
 
