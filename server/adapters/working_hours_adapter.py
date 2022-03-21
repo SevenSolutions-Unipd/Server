@@ -1,72 +1,62 @@
-from chatterbot.conversation import Statement
 from chatterbot.logic import LogicAdapter
-from server.utils.statement_apikey import StatementApiKey
+
 from server.requests.workinghours_request import WorkingHoursRequest
+from server.statements.working_hours_statement import WorkingHoursStatement
+
 from server.utils.utils import lev_dist
+
 import requests
 
 
 class WorkingHoursAdapter(LogicAdapter):
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
-        self.prev_statement: str = None
-        self.adapter: str = None
-        self.request = None
-        self.apiKey = None
 
     def can_process(self, statement):
-        if self.adapter == "WorkingHoursAdapter":
-            return True
-
         hoursWords = ['ore']
         workWords = ['consuntivato', 'registrato', 'fatto']
 
-        if not lev_dist(statement.text.split(), hoursWords):
-            return False
-
-        if not lev_dist(statement.text.split(), workWords):
+        if not lev_dist(statement.text.split(), hoursWords) or not lev_dist(statement.text.split(), workWords):
             return False
 
         return True
 
-    def process(self, input_statement, additional_response_selection_parameters):
-        if self.adapter is None:
-            self.adapter = "WorkingHoursAdapter"
-            self.request = WorkingHoursRequest()
-            self.prev_statement = None
-            # funziona SOLO CON UNA PERSONA!!
+    def process(self, statement, additional_response_selection_parameters=None, **kwargs):
 
-        if isinstance(input_statement, StatementApiKey) and input_statement.apiKey is not None:
-            self.apiKey = input_statement.apiKey
+        request = WorkingHoursRequest(
+            kwargs.get("project", None),
+            kwargs.get("fromDate", None),
+            kwargs.get("toDate", None)
+        )
 
-        response = self.request.parseUserInput(input_statement.text, self.prev_statement)
-        self.prev_statement = response
+        response = request.parseUserInput(statement.text, statement.in_response_to)
 
-        if self.request.isReady():
-            url = "https://apibot4me.imolinfo.it/v1/projects/" + self.request.project + "/activities/me"
+        if request.isReady():
+            url = "https://apibot4me.imolinfo.it/v1/projects/" + request.project + "/activities/me"
 
             params = dict()
-            if self.request.fromdate is not None:
-                params['from'] = self.request.fromdate
+            if request.fromDate is not None:
+                params['from'] = request.fromDate
 
-            if self.request.todate is not None:
-                params['to'] = self.request.todate
+            if request.toDate is not None:
+                params['to'] = request.toDate
 
-            responseUrl = requests.get(url, headers={"api_key": self.apiKey}, params=params)
+            apiKey = kwargs.get("api_key")
+            serviceResponse = requests.get(url, headers={"api_key": apiKey}, params=params)
 
-            response_statement = Statement(self.request.parseResult(responseUrl))
-            # response_statement.confidence = 0.1
-
-            self.adapter = None
-            self.request = None
-            self.prev_statement = None
+            response = request.parseResult(serviceResponse)
+            isRequestProcessed = True
         else:
-            if self.request.isQuitting:
-                self.adapter = None
-                self.request = None
-                self.prev_statement = None
+            isRequestProcessed = True if request.isQuitting else False
 
-            response_statement = Statement(response)
-            # response_statement.confidence = 1
+        response_statement = WorkingHoursStatement(
+            response,
+            statement.text,
+            isRequestProcessed,
+            request.project,
+            request.fromDate,
+            request.toDate)
+
+        response_statement.confidence = 1
 
         return response_statement

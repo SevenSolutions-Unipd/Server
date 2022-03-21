@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imola Informatica ChatBot</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
@@ -46,7 +46,7 @@
         <hr class="my-2">
 
         <div class="row">
-          <div class="col-xs-6 offset-xs-3">
+          <div class="col-sm-6 col-xs-12 offset-sm-3 offset-xs-0">
             <ul class="list-group chat-log js-chat-log">
             </ul>
 
@@ -114,6 +114,15 @@
         });
       }
 
+      function validateAndSubmit() {
+          {#if(localStorage.getItem('apiKey') === null)#}
+          {#    $('#exampleModalCenter').modal('show');#}
+          if($input.val().length === 0)
+              $input.focus();
+          else
+              submitInput();
+      }
+
       function submitInput() {
           const inputData = {
               'text': $input.val()
@@ -146,22 +155,18 @@
       }
 
       $sayButton.click(function() {
-          if($input.val().length === 0)
-              $input.focus();
-          else
-            submitInput();
+          validateAndSubmit();
       });
 
       $saveApiKeyButton.click(function () {
          localStorage.setItem("apiKey",$('#apiKeyVal').val());
+         $('#exampleModalCenter').modal('hide');
       });
 
       $input.keydown(function(event) {
               // Submit the input when the enter button is pressed
-              if (event.keyCode === 13 && $input.val().length > 0) {
-                  submitInput();
-              } else {
-                  $input.focus();
+              if (event.keyCode === 13) {
+                  validateAndSubmit();
               }
           }
       );
