@@ -114,6 +114,15 @@
         });
       }
 
+      function validateAndSubmit() {
+          if(localStorage.getItem('apiKey') === null)
+              $('#exampleModalCenter').modal('show');
+          else if($input.val().length === 0)
+              $input.focus();
+          else
+              submitInput();
+      }
+
       function submitInput() {
           const inputData = {
               'text': $input.val()
@@ -146,10 +155,7 @@
       }
 
       $sayButton.click(function() {
-          if($input.val().length === 0)
-              $input.focus();
-          else
-            submitInput();
+          validateAndSubmit();
       });
 
       $saveApiKeyButton.click(function () {
@@ -159,10 +165,8 @@
 
       $input.keydown(function(event) {
               // Submit the input when the enter button is pressed
-              if (event.keyCode === 13 && $input.val().length > 0) {
-                  submitInput();
-              } else {
-                  $input.focus();
+              if (event.keyCode === 13) {
+                  validateAndSubmit();
               }
           }
       );
