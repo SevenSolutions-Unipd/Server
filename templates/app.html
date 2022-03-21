@@ -115,9 +115,9 @@
       }
 
       function validateAndSubmit() {
-          if(localStorage.getItem('apiKey') === null)
-              $('#exampleModalCenter').modal('show');
-          else if($input.val().length === 0)
+          {#if(localStorage.getItem('apiKey') === null)#}
+          {#    $('#exampleModalCenter').modal('show');#}
+          if($input.val().length === 0)
               $input.focus();
           else
               submitInput();

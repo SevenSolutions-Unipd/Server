@@ -11,7 +11,6 @@ import requests
 class WorkingHoursAdapter(LogicAdapter):
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
-        self.apiKey = None
 
     def can_process(self, statement):
         hoursWords = ['ore']
