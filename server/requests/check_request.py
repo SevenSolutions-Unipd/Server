@@ -1,15 +1,14 @@
 from requests import Response
-from server.requests.request_interface import RequestInterface
+from server.requests.abstract_request import AbstractRequest
 from server.utils import utils
 import re
 
-class CheckRequest(RequestInterface):
+class CheckRequest(AbstractRequest):
     responseLocationMissing = "A che sede ti stai riferendo?"
 
-    def __init__(self):
+    def __init__(self, location=None):
         self.isQuitting = False
-        self.location = None
-        self.user = None
+        self.location = location
 
     def parseUserInput(self, input_statement: str, prev_statement: str) -> str:
         if prev_statement is None:
@@ -37,12 +36,6 @@ class CheckRequest(RequestInterface):
             if prev_statement == self.responseLocationMissing:
                 self.location = input_statement
                 return "Eseguo azione!"
-
-
-    def checkQuitting(self, text: str) -> bool:
-        quitWords = ['annulla', 'elimina', 'rimuovi']
-        self.isQuitting = True
-        return any(text.lower().find(check) > -1 for check in quitWords)
 
     def isReady(self) -> bool:
         if self.location is not None:

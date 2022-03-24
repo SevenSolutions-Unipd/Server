@@ -1,22 +1,14 @@
-from chatterbot.conversation import Statement
 from chatterbot.logic import LogicAdapter
-from server.utils.statement_apikey import StatementApiKey
 from server.requests.check_request import CheckRequest
+from server.statements.check_statement import CheckStatement
 from server.utils.utils import lev_dist
 import requests
 
 class CheckInAdapter(LogicAdapter):
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
-        self.prev_statement: str = None
-        self.adapter: str = None
-        self.request = None
-        self.apiKey = None
 
     def can_process(self, statement):
-        if self.adapter is not None:
-            return True
-
         checkWords = ['check-in']
 
         if not lev_dist(statement.text.split(), checkWords):
@@ -24,46 +16,41 @@ class CheckInAdapter(LogicAdapter):
 
         return True
 
-    def process(self, input_statement, additional_response_selection_parameters):
-        if self.adapter is None:
-            self.adapter = "CheckInAdapter"
-            self.request = CheckRequest()
-            self.prev_statement = None
+    def process(self, statement, additional_response_selection_parameters=None, **kwargs):
 
-        if isinstance(input_statement, StatementApiKey) and input_statement.apiKey is not None:
-            self.apiKey = input_statement.apiKey
+        request = CheckRequest(
+            kwargs.get("location", None)
+        )
+
+        apiKey = kwargs.get("api_key")
 
         presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
-        response_presence_url = requests.get(presence_url, headers={"api_key": self.apiKey})
-        response_statement = Statement(self.request.controlCheckIn(response_presence_url))
+        response_presence_url = requests.get(presence_url, headers={"api_key": apiKey})
+        response_statement = request.controlCheckIn(response_presence_url)
 
 #commentato perche sempre attivo con le api fornite
 #        if response_statement != "":
 #            return Statement("hai già fatto il check-in nella sede: "+response_statement.text)
 
-        response = self.request.parseUserInput(input_statement.text, self.prev_statement)
-        self.prev_statement = response
+        response = request.parseUserInput(statement.text, statement.in_response_to)
 
-        if self.request.isReady():
-            url = "https://apibot4me.imolinfo.it/v1/locations/" + self.request.location + "/presence"
-
-
-            responseUrl = requests.post(url, headers={"api_key": self.apiKey})
+        if request.isReady():
+            url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/presence"
 
 
-            response_statement = Statement(self.request.parseResult(responseUrl))
-            #response_statement.confidence = 0
+            serviceResponse = requests.post(url, headers={"api_key": apiKey})
 
-            self.adapter = None
-            self.request = None
-            self.prev_statement = None
+            response = request.parseResult(serviceResponse)
+            isRequestProcessed = True
         else:
-            if self.request.isQuitting:
-                self.adapter = None
-                self.request = None
-                self.prev_statement = None
+            isRequestProcessed = True if request.isQuitting else False
 
-            response_statement = Statement(response)
-            #response_statement.confidence = 0
+        response_statement = CheckStatement(
+            response,
+            statement.text,
+            isRequestProcessed,
+            request.location)
+
+        response_statement.confidence = 1
 
         return response_statement
