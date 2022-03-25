@@ -51,6 +51,6 @@ class CheckInAdapter(LogicAdapter):
             isRequestProcessed,
             request.location)
 
-        response_statement.confidence = 1
+        response_statement.confidence = 0.7
 
         return response_statement
