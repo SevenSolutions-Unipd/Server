@@ -8,13 +8,13 @@ class AbstractRequest:
     responseBad = "Qualcosa è andato storto :("
 
     def __init__(self, **kwargs):
-        self.isQuitting = None
+        self.isQuitting = False
 
     def checkQuitting(self, text: str) -> bool:
         quitWords = ['annulla', 'elimina', 'rimuovi']
-        self.isQuitting = True
 
-        return lev_dist(text.split(), quitWords)
+        self.isQuitting = True if lev_dist(text.split(), quitWords) else False
+        return self.isQuitting
 
     def isQuitting(self) -> bool:
         return self.isQuitting
@@ -23,7 +23,7 @@ class AbstractRequest:
         """Check if the object is ready to process the request"""
         pass
 
-    def parseUserInput(self, input_statement: str, prev_statement: str) -> str:
+    def parseUserInput(self, input_statement: str, prev_statement: str, **kwargs) -> str:
         """Parse user input to find out if new infos are available"""
         pass
 
