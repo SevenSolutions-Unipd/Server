@@ -18,7 +18,7 @@ class WorkingHoursRequest(AbstractRequest):
         self.fromDate = fromDate
         self.toDate = toDate
 
-    def parseUserInput(self, input_statement: str, prev_statement: str) -> str:
+    def parseUserInput(self, input_statement: str, prev_statement: str, **kwargs) -> str:
         if prev_statement is None:
             sanitizedWords = re.sub("[^a-zA-Z0-9 \n./]", ' ', input_statement).split()
 
