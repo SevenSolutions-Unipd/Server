@@ -29,7 +29,7 @@ class WorkingHoursAdapter(LogicAdapter):
             kwargs.get("toDate", None)
         )
 
-        response = request.parseUserInput(statement.text, statement.in_response_to)
+        response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
 
         if request.isReady():
             url = "https://apibot4me.imolinfo.it/v1/projects/" + request.project + "/activities/me"

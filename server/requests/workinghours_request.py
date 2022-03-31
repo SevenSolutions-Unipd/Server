@@ -11,8 +11,9 @@ class WorkingHoursRequest(AbstractRequest):
     responseProjectMissing = "A quale progetto ti stai riferendo?"
     responseProjectNotFound = "Il progetto che hai cercato non esiste"
 
-    def __init__(self, project=None, fromDate=None, toDate=None):
-        self.isQuitting = False
+    def __init__(self, project=None, fromDate=None, toDate=None, **kwargs):
+        super().__init__(**kwargs)
+
         self.project = project
         self.fromDate = fromDate
         self.toDate = toDate
@@ -37,6 +38,7 @@ class WorkingHoursRequest(AbstractRequest):
                 self.fromDate = self.extractDate(sanitizedWords, ['dal'])
                 self.toDate = self.extractDate(sanitizedWords, ['al'])
 
+                return "Eseguo azione!"
             else:
                 return self.responseProjectMissing
         else:
@@ -67,11 +69,11 @@ class WorkingHoursRequest(AbstractRequest):
 
             return strReturn
         elif response.status_code == 401:
-            return self.responseUnauthorized
+            return AbstractRequest.responseUnauthorized
         elif response.status_code == 404:
-            return self.responseProjectNotFound
+            return WorkingHoursRequest.responseProjectNotFound
         else:
-            return self.responseBad
+            return AbstractRequest.responseBad
 
     # UTILITY METHODS
     def extractDate(self, words: list, flags: list) -> str:

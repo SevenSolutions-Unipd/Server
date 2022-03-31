@@ -24,6 +24,21 @@ def lev_dist_str(words: list, correctWords: list) -> str:
     return best_word
 
 
+def lev_dist_str_correct_word(words: list, correctWords: list) -> str:
+    best_match = 999
+    best_word = None
+
+    for word in words:
+        for correctWord in correctWords:
+            dist = distance(word.lower(), correctWord.lower())
+
+            if dist <= acceptable_typos(word, correctWord) and dist <= best_match:
+                best_match = distance(word.lower(), correctWord.lower())
+                best_word = correctWord
+
+    return best_word
+
+
 def acceptable_typos(str1: str, str2: str) -> int:
     minLength = min(len(str1), len(str2))
 
