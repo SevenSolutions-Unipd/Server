@@ -1,3 +1,5 @@
+from typing import Optional
+
 from requests import Response
 
 from server.requests.abstract_request import AbstractRequest
@@ -75,8 +77,7 @@ class WorkingHoursRequest(AbstractRequest):
         else:
             return AbstractRequest.responseBad
 
-    # UTILITY METHODS
-    def extractDate(self, words: list, flags: list) -> str:
+    def extractDate(self, words: list, flags: list) -> Optional[str]:
         if utils.lev_dist(words, flags):
             typo = utils.lev_dist_str(words, flags)
 
@@ -87,5 +88,4 @@ class WorkingHoursRequest(AbstractRequest):
                         .strftime('%Y-%m-%d')
                 except ValueError:
                     return None
-
         return None

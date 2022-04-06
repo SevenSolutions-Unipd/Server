@@ -11,7 +11,7 @@ class AbstractRequest:
         self.isQuitting = False
 
     def checkQuitting(self, text: str) -> bool:
-        quitWords = ['annulla', 'elimina', 'rimuovi']
+        quitWords = ['annulla', 'elimina', 'rimuovi', 'stop', 'basta']
 
         self.isQuitting = True if lev_dist(text.split(), quitWords) else False
         return self.isQuitting
