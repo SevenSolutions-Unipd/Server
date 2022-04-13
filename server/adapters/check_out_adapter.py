@@ -10,7 +10,7 @@ class CheckOutAdapter(LogicAdapter):
         super().__init__(chatbot, **kwargs)
 
     def can_process(self, statement):
-        checkWords = ['check-out', 'checkout', 'uscendo']
+        checkWords = ['check-out', 'checkout', 'uscendo', 'esco']
 
         if not lev_dist(statement.text.split(), checkWords):
             return False

@@ -1,15 +1,13 @@
-from chatterbot.conversation import Statement
+from requests import Response
+
 from chatterbot.logic import LogicAdapter
-from server.statements.request_statement import RequestStatement
+from server.requests.help_request import HelpRequest
+from server.statements.help_statement import HelpStatement
 from server.utils.utils import lev_dist
 import re
 
 
 class HelpAdapter(LogicAdapter):
-    helpResponse = "Per sapere le ore che hai registrato puoi mandarmi un messaggio del tipo: \"Quante ore ho " \
-                   "consuntivato nel progetto ***?\" Se ti interessa un particolare arco temporale puoi aggiungerlo " \
-                   "alla richiesta indicando \"dal gg/mm/aaaa al gg/mm/aaaa\""
-
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
         self.adapter = None
@@ -28,7 +26,25 @@ class HelpAdapter(LogicAdapter):
         return True
 
     def process(self, statement, additional_response_selection_parameters=None, **kwargs):
-        response_statement = RequestStatement(self.helpResponse, statement.text, True)
-        response_statement.confidence = 0.5
+
+        request = HelpRequest(
+            kwargs.get("request", None),
+        )
+
+        response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
+
+        if request.isReady():
+            response = request.parseResult(Response())
+            isRequestProcessed = True
+        else:
+            isRequestProcessed = True if request.isQuitting else False
+
+        response_statement = HelpStatement(
+            response,
+            statement.text,
+            isRequestProcessed,
+            request.request)
+
+        response_statement.confidence = 1
 
         return response_statement

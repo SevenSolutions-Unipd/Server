@@ -10,7 +10,7 @@ class ChatBotAdapter:
     def __init__(self):
         self.chatterbot = ChatBot(**settings.CHATTERBOT)
 
-    def getResponse(self, session, statement: Statement = None, **kwargs):
+    def getResponse(self, session, statement: Statement = None, **kwargs) -> Statement:
         if isinstance(statement, str):
             kwargs['text'] = statement
 
@@ -21,19 +21,10 @@ class ChatBotAdapter:
         input_statement = Statement(text=text, **kwargs)
         kwargs.clear()
 
-        if "adapter" in session:
-            # request processing already started
-            kwargs = session.get("statement")
-            kwargs["api_key"] = session["api_key"]
+        result = None
 
-            input_statement.in_response_to = kwargs.pop("text")
-
-            for adapter in self.chatterbot.logic_adapters:
-                if adapter.class_name == session.get("adapter"):
-                    result = adapter.process(input_statement, None, **kwargs)
-        else:
+        if "adapter" not in session:
             # new request
-            result = None
             max_confidence = -1
             kwargs["api_key"] = session["api_key"]
 
@@ -45,6 +36,17 @@ class ChatBotAdapter:
                         session["adapter"] = adapter.class_name
                         result = output
                         max_confidence = output.confidence
+        else:
+            # request processing already started
+            kwargs = session.get("statement")
+            kwargs["api_key"] = session["api_key"]
+
+            input_statement.in_response_to = kwargs.pop("text")
+
+            for adapter in self.chatterbot.logic_adapters:
+                if adapter.class_name == session.get("adapter"):
+                    result = adapter.process(input_statement, None, **kwargs)
+                    break
 
         if result.isRequestProcessed:
             if "adapter" in session:

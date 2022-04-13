@@ -19,7 +19,7 @@ class CheckRequest(AbstractRequest):
     responseCheckInAlreadyDone = "Hai già fatto il check-in nella sede di "
     responseCheckInNotDone = "Non hai ancora effettuato il check-in!"
 
-    def __init__(self, location=None, **kwargs):
+    def __init__(self, location: str = None, **kwargs):
         super().__init__(**kwargs)
         self.location = location
 

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chatterbot.ext.django_chatterbot',
-    'server'
+    'server',
 ]
 
 MIDDLEWARE = [

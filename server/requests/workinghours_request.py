@@ -9,6 +9,20 @@ import re
 from server.utils import utils
 
 
+def extractDate(words: list, flags: list) -> Optional[str]:
+    if utils.lev_dist(words, flags):
+        typo = utils.lev_dist_str(words, flags)
+
+        if words.index(typo) + 1 < len(words):
+            try:
+                return datetime \
+                    .strptime(words[words.index(typo) + 1], '%d/%m/%Y') \
+                    .strftime('%Y-%m-%d')
+            except ValueError:
+                return None
+    return None
+
+
 class WorkingHoursRequest(AbstractRequest):
     responseProjectMissing = "A quale progetto ti stai riferendo?"
     responseProjectNotFound = "Il progetto che hai cercato non esiste"
@@ -37,8 +51,8 @@ class WorkingHoursRequest(AbstractRequest):
                 for i in range(len(sanitizedWords)):
                     sanitizedWords[i] = sanitizedWords[i].lower()
 
-                self.fromDate = self.extractDate(sanitizedWords, ['dal'])
-                self.toDate = self.extractDate(sanitizedWords, ['al'])
+                self.fromDate = extractDate(sanitizedWords, ['dal'])
+                self.toDate = extractDate(sanitizedWords, ['al'])
 
                 return "Eseguo azione!"
             else:
@@ -76,16 +90,3 @@ class WorkingHoursRequest(AbstractRequest):
             return WorkingHoursRequest.responseProjectNotFound
         else:
             return AbstractRequest.responseBad
-
-    def extractDate(self, words: list, flags: list) -> Optional[str]:
-        if utils.lev_dist(words, flags):
-            typo = utils.lev_dist_str(words, flags)
-
-            if words.index(typo) + 1 < len(words):
-                try:
-                    return datetime \
-                        .strptime(words[words.index(typo) + 1], '%d/%m/%Y') \
-                        .strftime('%Y-%m-%d')
-                except ValueError:
-                    return None
-        return None
