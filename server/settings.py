@@ -79,6 +79,9 @@ CHATTERBOT = {
         },
         {
             'import_path': 'server.adapters.msg_notrecognizable_adapter.MessageNotRecognizableAdapter'
+        },
+        {
+            'import_path': 'server.adapters.activity_adapter.ActivityAdapter'
         }
     ],
     'storage_adapter': {

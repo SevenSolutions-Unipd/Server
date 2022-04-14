@@ -30,9 +30,10 @@ class HelpRequest(AbstractRequest):
     checkinInfoHelp = "Per sapere se hai già effettuato il check-in in una sede puoi mandarmi un messaggio del tipo: " \
                       "\"Ho già fatto il check-in?\""
 
-    billActivityHelp = "Non so ancora svolgere questa operazione :("
+    billActivityHelp = "Per inserire un'attività nel sistema EMT puoi mandarmi un messaggio del tipo: " \
+                       "\"Registra un'attività\".\n\nIo ti guiderò nella procedura di inserimento :)"
 
-    billabledActivitiesHelp = "Per sapere le ore che hai registrato puoi mandarmi un messaggio del tipo: \"Quante ore "\
+    billabledActivitiesHelp = "Per sapere le ore che hai registrato puoi mandarmi un messaggio del tipo: \"Quante ore " \
                               "ho " \
                               "consuntivato nel progetto ***?\" Se ti interessa un particolare arco temporale puoi " \
                               "aggiungerlo " \
