@@ -36,8 +36,6 @@ class CheckInAdapter(LogicAdapter):
 
         response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
 
-        # validare la sede prima!
-
         if request.isReady():
             url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/presence"
 

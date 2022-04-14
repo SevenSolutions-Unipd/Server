@@ -10,12 +10,8 @@ import re
 class HelpAdapter(LogicAdapter):
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
-        self.adapter = None
 
     def can_process(self, statement):
-        if self.adapter is not None:
-            return True
-
         words = ['aiuto', 'farmacista', 'help', 'come', 'funziona', 'istruzioni']
 
         sanitizedWords = re.sub("[^a-zA-Z0-9 \n./]", ' ', statement.text).split()

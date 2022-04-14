@@ -55,12 +55,6 @@ class ChatBotAdapter:
             if "statement" in session:
                 session.pop("statement")
         else:
-            data = result.serialize()
-
-            for field in data:
-                if isinstance(data[field], datetime):
-                    data[field] = str(data[field])
-
-            session["statement"] = data
+            session["statement"] = result.serialize()
 
         return result

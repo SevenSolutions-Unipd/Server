@@ -44,12 +44,12 @@ class ActivityRequest(AbstractRequest):
                 return ActivityRequest.responseHoursToBill
 
             if prev_statement.__contains__(ActivityRequest.responseHoursToBill):
-                if input_statement.isnumeric():
-                    self.billableHours = int(input_statement)
+                try:
+                    self.billableHours = float(input_statement)
                     return ActivityRequest.responseLocationRequest
-                else:
-                    return "Hai inserito le ore in un formato sbagliato! Devi inserire un numero!\n\n" \
-                           + ActivityRequest.responseHoursToBill
+                except ValueError:
+                    return "Hai inserito le ore in un formato sbagliato! Devi inserire un numero!" \
+                           "(l'eventuale separatore deve essere \".\")\n\n" + ActivityRequest.responseHoursToBill
 
             if prev_statement.__contains__(ActivityRequest.responseLocationRequest):
                 if not any(str.isdigit(c) for c in input_statement):

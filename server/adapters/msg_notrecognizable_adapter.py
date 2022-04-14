@@ -1,4 +1,3 @@
-from chatterbot.conversation import Statement
 from chatterbot.logic import LogicAdapter
 from server.statements.request_statement import RequestStatement
 
