@@ -46,7 +46,6 @@ class ActivityAdapter(LogicAdapter):
             # response = request.parseResult(serviceResponse)
 
             response = body
-
             isRequestProcessed = True
         else:
             isRequestProcessed = True if request.isQuitting else False

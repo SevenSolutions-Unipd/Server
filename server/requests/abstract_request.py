@@ -5,7 +5,7 @@ from server.utils.utils import lev_dist
 
 class AbstractRequest:
     responseUnauthorized = "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
-    responseBad = "Qualcosa è andato storto :("
+    responseBad = "Qualcosa è andato storto! :("
 
     def __init__(self, **kwargs):
         self.isQuitting = False

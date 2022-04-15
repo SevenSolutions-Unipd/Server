@@ -38,7 +38,6 @@ class CheckInAdapter(LogicAdapter):
 
         if request.isReady():
             url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/presence"
-
             serviceResponse = requests.post(url, headers={"api_key": apiKey})
 
             response = request.parseResult(serviceResponse)

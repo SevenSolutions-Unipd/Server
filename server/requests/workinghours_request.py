@@ -43,7 +43,6 @@ class WorkingHoursRequest(AbstractRequest):
                 match = re.search(typo, input_statement, re.IGNORECASE).group()
 
                 if sanitizedWords.index(match) + 1 < len(sanitizedWords):
-                    # TODO: project syntax validation (forse già fatta sopra?)
                     self.project = sanitizedWords[sanitizedWords.index(match) + 1]
                 else:
                     return self.responseProjectMissing
@@ -61,15 +60,13 @@ class WorkingHoursRequest(AbstractRequest):
             if self.checkQuitting(input_statement):
                 return "Richiesta annullata!"
 
-            if prev_statement == self.responseProjectMissing:
-                # TODO: validation on project syntax
+            if prev_statement.__contains__(self.responseProjectMissing):
                 self.project = input_statement
                 return "Eseguo azione!"
 
     def isReady(self) -> bool:
         if self.project is not None:
             return True
-
         return False
 
     def parseResult(self, response: Response) -> str:
@@ -82,7 +79,6 @@ class WorkingHoursRequest(AbstractRequest):
                 strReturn += "\tOre fatturate: " + str(record.get('billableHours', "non registrate")) + '\n'
                 strReturn += "\tNote: " + record.get('note', "none") + '\n'
                 strReturn += '\n'
-
             return strReturn
         elif response.status_code == 401:
             return AbstractRequest.responseUnauthorized
