@@ -11,18 +11,24 @@ class CheckInAdapterTest(TestCase):
         self.adapter = CheckInAdapter(self.chatbot)
         self.statement = Statement(None)
 
-    def test_can_process_ok(self):
+    def test_can_process_check_in(self):
         """Test if this adapter can process a correct instance"""
-        check_statements = ['Vorrei fare il check-in', 'checkin', 'sto entrando']
+        check_statements = ['Vorrei fare il check-in', 'checkin', 'sto entrando', 'check in']
         for word in check_statements:
             self.statement.text = word
             response = self.adapter.can_process(self.statement)
             self.assertEqual(response, True)
 
-    def test_can_process_not_ok(self):
+    def test_cant_process_check_in(self):
         """Test if this adapter refuse a wrong instance"""
         check_statements = ['check-out', 'vorrei uscire', 'ciao', 'something']
         for word in check_statements:
             self.statement.text = word
             response = self.adapter.can_process(self.statement)
             self.assertEqual(response, False)
+
+    def test_process_check_in(self):
+        """Test if this adapter can process an instance with every information"""
+        self.statement.text = 'Vorrei fare il check-in in sede imola'
+        response = self.adapter.process(self.statement)
+        self.assertEqual(response, "Check-in effettuato con successo nella sede imola")

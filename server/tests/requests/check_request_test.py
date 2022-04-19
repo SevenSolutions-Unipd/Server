@@ -39,7 +39,7 @@ class CheckRequestTest(TestCase):
         """Test if request tells the user to insert the location, since it's missing in user's first message"""
         input_statement = "Vorrei fare il check-in"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationMissing)
+        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationMissing)
         self.assertIsNone(self.request.location)
 
     def test_user_input_first_message_no_location_name(self):
@@ -49,24 +49,24 @@ class CheckRequestTest(TestCase):
 
         input_statement = "Vorrei effettuare il check-in in sede"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationMissing)
+        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationMissing)
         self.assertIsNone(self.request.location)
 
     def test_user_input_first_message_only_location(self):
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Vorrei effettuare il check-in in sede imola"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None), "Eseguo azione!")
+        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), "Eseguo azione!")
         self.assertIsNotNone(self.request.location)
 
     def test_user_input_first_message_wrong_location(self):
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Vorrei effettuare il check-in in sede toronto"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationWrong)
+        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationWrong)
         self.assertIsNotNone(self.request.location)
 
-    def test_user_input_only_project(self):
+    def test_user_input_only_location(self):
         """Test if message containing only location's name is correctly parsed"""
         input_statement = "imola"
         prev_statement = self.request.responseLocationMissing
@@ -120,3 +120,9 @@ class CheckRequestTest(TestCase):
 
         self.assertEqual(response, False)
 
+    def test_validate_location_with_small_mispell(self):
+        """Test if validateLocation() recognizes an existing mispelled site"""
+        mispelled_location = ['imala', 'inola', 'imolo']
+        for word in mispelled_location:
+            response = self.request.validateLocation(word)
+            self.assertEqual(response, True)
