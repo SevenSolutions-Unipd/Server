@@ -1,5 +1,5 @@
 from unittest import TestCase
-from server.requests.check_request import CheckRequest
+from server.requests.check_request import *
 
 
 class CheckRequestTest(TestCase):
