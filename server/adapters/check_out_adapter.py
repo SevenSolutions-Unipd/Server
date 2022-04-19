@@ -18,7 +18,6 @@ class CheckOutAdapter(LogicAdapter):
         return True
 
     def process(self, statement, additional_response_selection_parameters=None, **kwargs):
-
         apiKey = kwargs.get("api_key")
 
         presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"

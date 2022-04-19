@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from chatterbot import ChatBot
 from chatterbot.conversation import Statement
 

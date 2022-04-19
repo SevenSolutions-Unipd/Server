@@ -1,4 +1,4 @@
-from requests import Response
+import requests
 
 from chatterbot.logic import LogicAdapter
 from server.requests.help_request import HelpRequest
@@ -30,7 +30,7 @@ class HelpAdapter(LogicAdapter):
         response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
 
         if request.isReady():
-            response = request.parseResult(Response())
+            response = request.parseResult(requests.Response())
             isRequestProcessed = True
         else:
             isRequestProcessed = True if request.isQuitting else False

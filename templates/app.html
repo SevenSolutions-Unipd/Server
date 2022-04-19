@@ -6,100 +6,106 @@
     <title>Imola Informatica ChatBot</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/icons.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}"/>
 </head>
 <body>
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="modalSettings" tabindex="-1" role="dialog" aria-labelledby="modalSettingsTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Autenticazione richiesta</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>
-            Sembra che tu non sia ancora autenticato!<br>
-              Per favore effettua il login su <a href="https://google.com" target="_blank">Imola Informatica</a> ed inserisci la chiave di accesso!
-            </p>
-
-            <div class="input-group">
-              <input type="text" class="form-control" id="apiKeyVal" placeholder="Chiave di accesso" aria-label="Chiave di accesso">
+            <div class="modal-header">
+                <h5 class="modal-title" style="float: left !important;" id="modalSettingsTitle">Autenticazione richiesta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-            <button type="button" class="btn btn-primary" id="saveApiKeyButton">Salva</button>
-          </div>
-        </div>
-      </div>
-    </div>
+            <div class="modal-body">
+                <p>
+                    Effettua il login su <a href="https://google.com" target="_blank">Imola Informatica</a>
+                    ed inserisci la chiave di accesso!
+                </p>
 
-    <div class="container">
-      <div class="jumbotron mt-1">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="apiKeyVal" placeholder="Chiave di accesso"
+                           aria-label="Chiave di accesso">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" id="saveApiKeyButton">Salva</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="jumbotron mt-1">
         <h1 class="jumbotron-heading text-xs-center">Imola Informatica Chatbot</h1>
         <p class="lead text-xs-center">
-          Chat with me! ;)
+            Chat with me! ;)
         </p>
 
         <hr class="my-2">
 
         <div class="row">
-          <div class="col-sm-6 col-xs-12 offset-sm-3 offset-xs-0">
-            <ul class="list-group chat-log js-chat-log">
-            </ul>
+            <div class="col-sm-6 col-xs-12 offset-sm-3 offset-xs-0">
+                <ul class="list-group chat-log js-chat-log">
+                </ul>
 
-            <div class="input-group input-group-lg mt-1">
-              <input type="text" class="form-control js-text" placeholder="Messaggio"/>
-              <span class="input-group-btn">
-                <button class="btn btn-primary js-say">Submit</button>
+                <div class="input-group input-group-lg mt-1">
+                <span class="input-group-btn">
+                    <button class="btn btn-info js-settings"><i class="bi bi-gear"></i></button>
+                </span>
+                    <input type="text" class="form-control js-text" placeholder="Messaggio"/>
+                    <span class="input-group-btn">
+                <button class="btn btn-primary js-say"><i class="bi bi-send"></i></button>
               </span>
+                </div>
+
             </div>
-
-          </div>
         </div>
-
-      </div>
-
     </div>
+</div>
 
-    {% csrf_token %}
+{% csrf_token %}
 
-    <script src="{% static 'js/jquery.js' %}"></script>
-    <script src="{% static 'js/js.cookie.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <script>
-        const chatterbotUrl = '{% url "chatterbot" %}';
-        {#var csrftoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;#}
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/js.cookie.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script>
+    const chatterbotUrl = '{% url "chatterbot" %}';
+    {#var csrftoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;#}
 
-      function csrfSafeMethod(method) {
+    function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE|POST)$/.test(method));
-      }
+    }
 
-      const $chatlog = $('.js-chat-log');
-      const $input = $('.js-text');
-      const $sayButton = $('.js-say');
-      const $saveApiKeyButton = $('#saveApiKeyButton');
+    const $chatlog = $('.js-chat-log');
+    const $input = $('.js-text');
+    const $sayButton = $('.js-say');
+    const $saveApiKeyButton = $('#saveApiKeyButton');
+    const $settingsButton = $('.js-settings');
+    const $modalDialog = $('#modalSettings');
 
-      function createRow(text, side) {
-          const $row = $('<li class="list-group-item ' + side + '"></li>');
-          const $pre = $('<pre></pre>');
-          $pre.text(text)
+    function createRow(text, side) {
+        const $row = $('<li class="list-group-item ' + side + '"></li>');
+        const $pre = $('<pre></pre>');
+        $pre.text(text)
 
         $row.append($pre);
         $chatlog.append($row);
-      }
+    }
 
-      function getFirstMessage() {
-          const $submit = $.ajax({
-              type: 'GET',
-              url: chatterbotUrl,
-              contentType: 'application/json'
-          });
+    function getFirstMessage() {
+        const $submit = $.ajax({
+            type: 'GET',
+            url: chatterbotUrl,
+            contentType: 'application/json'
+        });
 
-          $submit.done(function(statement) {
+        $submit.done(function (statement) {
             createRow(statement.text);
 
             // Clear the input field
@@ -109,37 +115,35 @@
             $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
         });
 
-        $submit.fail(function() {
-          // TODO: Handle errors
+        $submit.fail(function () {
+            // TODO: Handle errors
         });
-      }
+    }
 
-      function validateAndSubmit() {
-          {#if(localStorage.getItem('apiKey') === null)#}
-          {#    $('#exampleModalCenter').modal('show');#}
-          if($input.val().length === 0)
-              $input.focus();
-          else
-              submitInput();
-      }
+    function validateAndSubmit() {
+        if ($input.val().length === 0)
+            $input.focus();
+        else
+            submitInput();
+    }
 
-      function submitInput() {
-          const inputData = {
-              'text': $input.val()
-          };
+    function submitInput() {
+        const inputData = {
+            'text': $input.val()
+        };
 
-          // Display the user's input on the web page
+        // Display the user's input on the web page
         createRow(inputData.text, "right");
 
-          const $submit = $.ajax({
-              type: 'POST',
-              url: chatterbotUrl,
-              data: JSON.stringify(inputData),
-              headers: {"Authorization": localStorage.getItem('apiKey')},
-              contentType: 'application/json'
-          });
+        const $submit = $.ajax({
+            type: 'POST',
+            url: chatterbotUrl,
+            data: JSON.stringify(inputData),
+            headers: {"Authorization": localStorage.getItem('apiKey')},
+            contentType: 'application/json'
+        });
 
-          $submit.done(function(statement) {
+        $submit.done(function (statement) {
             createRow(statement.text, "left");
 
             // Clear the input field
@@ -149,35 +153,42 @@
             $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
         });
 
-        $submit.fail(function() {
-          // TODO: Handle errors
+        $submit.fail(function () {
+            // TODO: Handle errors
         });
-      }
+    }
 
-      $sayButton.click(function() {
-          validateAndSubmit();
-      });
+    $sayButton.click(function () {
+        validateAndSubmit();
+    });
 
-      $saveApiKeyButton.click(function () {
-         localStorage.setItem("apiKey",$('#apiKeyVal').val());
-         $('#exampleModalCenter').modal('hide');
-      });
+    $settingsButton.click(function () {
+        if (localStorage.getItem("apiKey") !== null)
+           $('#apiKeyVal').val(localStorage.getItem("apiKey"));
 
-      $input.keydown(function(event) {
-              // Submit the input when the enter button is pressed
-              if (event.keyCode === 13) {
-                  validateAndSubmit();
-              }
-          }
-      );
+        $modalDialog.modal('show');
+    });
 
-      $(document).ready(function () {
-          if(localStorage.getItem("apiKey") === null)
-              $('#exampleModalCenter').modal('show');
+    $saveApiKeyButton.click(function () {
+        localStorage.setItem("apiKey", $('#apiKeyVal').val());
+        $modalDialog.modal('hide');
+    });
 
-          getFirstMessage();
-          $input.focus();
-      });
-    </script>
-  </body>
+    $input.keydown(function (event) {
+            // Submit the input when the enter button is pressed
+            if (event.keyCode === 13) {
+                validateAndSubmit();
+            }
+        }
+    );
+
+    $(document).ready(function () {
+        if (localStorage.getItem("apiKey") === null)
+            $modalDialog.modal('show');
+
+        getFirstMessage();
+        $input.focus();
+    });
+</script>
+</body>
 </html>
