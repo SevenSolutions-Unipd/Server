@@ -12,6 +12,7 @@ class CheckOutAdapterTest(TestCase):
         self.statement = Statement(None)
 
     def test_can_process_check_out(self):
+        # TU-14
         """Test if this adapter can process a correct instance"""
         check_statements = ['Vorrei fare il check-out', 'checkout', 'sto uscendo', 'esco']
         for word in check_statements:
@@ -20,6 +21,7 @@ class CheckOutAdapterTest(TestCase):
             self.assertEqual(response, True)
 
     def test_cant_process_check_out(self):
+        # TU-15
         """Test if this adapter refuse a wrong instance"""
         check_statements = ['check-in', 'sto entrando', 'ciao', 'something']
         for word in check_statements:

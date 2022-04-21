@@ -14,6 +14,7 @@ class ActivityAdapterTest(TestCase):
         self.statement = Statement(None)
 
     def test_can_process_activity(self):
+        # TU-22
         """Test if this adapter can process a correct instance"""
         activity_statements = ['Vorrei consuntivare un\'attività', 'Voglio registrare nell\'EMT', 'Registrare nell\'EMT un\'attività']
         for word in activity_statements:
@@ -22,6 +23,7 @@ class ActivityAdapterTest(TestCase):
             self.assertEqual(response, True)
 
     def test_cant_process_activity(self):
+        # TU-23
         """Test if this adapter refuse a wrong instance"""
         activity_statements = ['check-out', 'sto entrando', 'ciao', 'something', 'buonasera']
         for word in activity_statements:
