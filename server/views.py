@@ -38,7 +38,7 @@ class ChatterBotApiView(View):
         if not request.session.session_key:
             request.session.create()
 
-        if request.headers["Authorization"] is not None:
+        if request.headers["Authorization"] is not None: # non funziona senza authorization settata (crasha)
             request.session["api_key"] = request.headers["Authorization"]
         else:
             request.session["api_key"] = None

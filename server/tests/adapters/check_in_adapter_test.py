@@ -1,4 +1,5 @@
-from unittest import TestCase
+from unittest import TestCase, mock
+from unittest.mock import Mock, patch
 from chatterbot import ChatBot
 from server import settings
 from server.adapters.check_in_adapter import CheckInAdapter
@@ -6,9 +7,10 @@ from chatterbot.conversation import Statement
 
 
 class CheckInAdapterTest(TestCase):
-    def setUp(self):
-        self.chatbot = ChatBot(**settings.CHATTERBOT)
-        self.adapter = CheckInAdapter(self.chatbot)
+
+    @patch("chatterbot.ChatBot")
+    def setUp(self, chatbot):
+        self.adapter = CheckInAdapter(chatbot)
         self.statement = Statement(None)
 
     def test_can_process_check_in(self):
@@ -31,4 +33,4 @@ class CheckInAdapterTest(TestCase):
         """Test if this adapter can process an instance with every information"""
         self.statement.text = 'Vorrei fare il check-in in sede imola'
         response = self.adapter.process(self.statement)
-        self.assertEqual(response, "Check-in effettuato con successo nella sede imola")
+        self.assertEqual(response, "Check-in effettuato con successo nella sede IMOLA")
