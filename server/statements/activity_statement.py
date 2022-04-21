@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from server.statements.request_statement import RequestStatement
 
 
