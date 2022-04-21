@@ -100,9 +100,9 @@ class CheckRequestTest(TestCase):
     def test_response_unauthorized(self):
         # TU-3
         """Test if API request return 401, giving no api key"""
-        url = "https://apibot4me.imolinfo.it/v1/locations/toronto/presence"
+        url = "https://apibot4me.imolinfo.it/v1/locations/imola/presence"
 
-        serviceResponse = requests.post(url)
+        serviceResponse = requests.get(url)
         response = self.request.parseResult(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 401)
