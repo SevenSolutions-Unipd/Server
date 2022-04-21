@@ -80,6 +80,7 @@ class CheckRequestTest(TestCase):
         prev_statement = self.request.responseLocationMissing
 
         response = self.request.parseUserInput(input_statement, prev_statement)
+
         self.assertEqual(response, "Eseguo azione!")
         self.assertIsNotNone(self.request.location)
 

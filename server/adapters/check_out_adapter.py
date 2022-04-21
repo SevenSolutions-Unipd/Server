@@ -12,7 +12,7 @@ class CheckOutAdapter(LogicAdapter):
     def can_process(self, statement):
         checkWords = ['check-out', 'checkout', 'uscendo', 'esco']
 
-        if not lev_dist(statement.text.split(), checkWords):
+        if not lev_dist(statement.text.split(), checkWords) or "?" in statement.text:
             return False
 
         return True

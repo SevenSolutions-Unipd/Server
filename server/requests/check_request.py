@@ -8,7 +8,7 @@ import re
 
 def controlCheckIn(response: Response) -> Optional[str]:
     if response.status_code == 200:
-        return response.json()[0].get('location', None)
+        return response.json()['location']
     else:
         return None
 
@@ -56,12 +56,14 @@ class CheckRequest(AbstractRequest):
         return False
 
     def parseResult(self, response: Response) -> str:
-        if response.status_code == 201:
+        if response.status_code == 204:
             return "Check-in effettuato con successo nella sede " + self.location
         elif response.status_code == 401:
             return AbstractRequest.responseUnauthorized
-        else:
+        elif response.status_code == 404:
             return "La sede inserita non esiste"
+        else:
+            return AbstractRequest.responseBad
 
     def validateLocation(self, site: str, **kwargs) -> bool:
         apiKey = kwargs.get("api_key", None)

@@ -12,7 +12,7 @@ class CheckInAdapter(LogicAdapter):
     def can_process(self, statement):
         checkWords = ['check-in', 'checkin', 'entrando']
 
-        if not lev_dist(statement.text.split(), checkWords):
+        if not lev_dist(statement.text.split(), checkWords) or "?" in statement.text:
             return False
 
         return True
@@ -23,27 +23,30 @@ class CheckInAdapter(LogicAdapter):
         )
 
         # check if user already checked in
-        apiKey = kwargs.get("api_key")
-
         presence_url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
-        response_presence = requests.get(presence_url, headers={"api_key": apiKey})
+        response_presence = requests.get(presence_url, headers={"api_key": kwargs.get("api_key", "")})
         response_checkin_done = controlCheckIn(response_presence)
 
-        # commentato perche sempre attivo con le api fornite
-        #        if response_checkin_done != None:
-        #            response = CheckRequest.responseCheckInAlreadyDone + response_checkin_done
-        #        else: (tutto il resto)
-
-        response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
-
-        if request.isReady():
-            url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/presence"
-            serviceResponse = requests.post(url, headers={"api_key": apiKey})
-
-            response = request.parseResult(serviceResponse)
+        if response_checkin_done is not None:
+            response = CheckRequest.responseCheckInAlreadyDone + response_checkin_done
             isRequestProcessed = True
         else:
-            isRequestProcessed = True if request.isQuitting else False
+            response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
+
+            if request.isReady():
+                url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/presence"
+
+                headers = {
+                    "api_key": kwargs.get("api_key", ""),
+                    "Content-type": 'application/json'
+                }
+
+                serviceResponse = requests.post(url, headers=headers, json={})
+
+                response = request.parseResult(serviceResponse)
+                isRequestProcessed = True
+            else:
+                isRequestProcessed = True if request.isQuitting else False
 
         response_statement = CheckStatement(
             response,

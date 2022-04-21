@@ -17,7 +17,7 @@ class ActivityAdapter(LogicAdapter):
 
     def can_process(self, statement):
         activityWords = ['attività', 'EMT']
-        verbsWords = ['consuntivare', 'registrare', 'inserire']
+        verbsWords = ['consuntivare', 'registrare', 'inserire', 'inserisci']
 
         statement.text = re.sub("[^a-zA-Z0-9 \n./]", ' ', statement.text)
 
@@ -43,10 +43,10 @@ class ActivityAdapter(LogicAdapter):
 
             headers = {
                 "Content-type": 'application/json',
-                "api_key": kwargs.get("api_key"),
-                "accept": "application/json"
+                "api_key": kwargs.get("api_key")
             }
-            serviceResponse = requests.post(url, headers=headers, data=request.getBody())
+
+            serviceResponse = requests.post(url, headers=headers, json=[request.getBody()])
             response = request.parseResult(serviceResponse)
 
             isRequestProcessed = True
