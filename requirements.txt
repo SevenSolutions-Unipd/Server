@@ -15,7 +15,7 @@ spacy>=3.2,<3.4
 sphinx>=3.0,<3.1
 sphinx_rtd_theme
 pyyaml>=5.3,<5.4
-git@github.com:gunthercox/chatterbot-corpus.git
+git+https://github.com/gunthercox/chatterbot-corpus@master#egg=chatterbot_corpus
 https://github.com/explosion/spacy-models/releases/download/it_core_news_sm-3.2.0/it_core_news_sm-3.2.0.tar.gz#egg=it_core_news_sm
 gunicorn
 requests~=2.27.1
