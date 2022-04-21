@@ -44,7 +44,7 @@ class CheckRequestTest(TestCase):
         """Test if request tells the user to insert the location, since it's missing in user's first message"""
         input_statement = "Vorrei fare il check-in"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationMissing)
+        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationMissing)
         self.assertIsNone(self.request.location)
 
     def test_user_input_first_message_no_location_name(self):
@@ -55,7 +55,7 @@ class CheckRequestTest(TestCase):
 
         input_statement = "Vorrei effettuare il check-in in sede"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationMissing)
+        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationMissing)
         self.assertIsNone(self.request.location)
 
     def test_user_input_first_message_only_location(self):
@@ -63,7 +63,7 @@ class CheckRequestTest(TestCase):
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Vorrei effettuare il check-in in sede imola"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), "Eseguo azione!")
+        self.assertEqual(self.request.parseUserInput(input_statement, None), "Eseguo azione!")
         self.assertIsNotNone(self.request.location)
 
     def test_user_input_first_message_wrong_location(self):
@@ -71,7 +71,7 @@ class CheckRequestTest(TestCase):
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Vorrei effettuare il check-in in sede toronto"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, 'nothing'), CheckRequest.responseLocationWrong)
+        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationWrong)
         self.assertIsNotNone(self.request.location)
 
     def test_user_input_only_location(self):
@@ -90,10 +90,10 @@ class CheckRequestTest(TestCase):
         url = "https://apibot4me.imolinfo.it/v1/locations/imola/presence"
         apiKey = "12345678-1234-1234-1234-123456789012"
 
-        serviceResponse = requests.post(url, headers={"api_key": apiKey})
+        serviceResponse = requests.get(url, headers={"api_key": apiKey})
         response = self.request.parseResult(serviceResponse)
 
-        self.assertEqual(serviceResponse.status_code, 201)
+        self.assertEqual(serviceResponse.status_code, 200)
         self.assertNotEqual(response, CheckRequest.responseUnauthorized)
         self.assertNotEqual(response, "La sede inserita non esiste")
 
