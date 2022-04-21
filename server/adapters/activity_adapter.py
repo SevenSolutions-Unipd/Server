@@ -1,3 +1,4 @@
+import json
 import re
 from datetime import datetime
 
@@ -39,13 +40,15 @@ class ActivityAdapter(LogicAdapter):
 
         if request.isReady():
             url = "https://apibot4me.imolinfo.it/v1/projects/" + request.project + "/activities/me"
-            body = request.getBody()
 
-            apiKey = kwargs.get("api_key")
-            # serviceResponse = requests.get(url, headers={"api_key": apiKey}, data=body)
-            # response = request.parseResult(serviceResponse)
+            headers = {
+                "Content-type": 'application/json',
+                "api_key": kwargs.get("api_key"),
+                "accept": "application/json"
+            }
+            serviceResponse = requests.post(url, headers=headers, data=request.getBody())
+            response = request.parseResult(serviceResponse)
 
-            response = body
             isRequestProcessed = True
         else:
             isRequestProcessed = True if request.isQuitting else False

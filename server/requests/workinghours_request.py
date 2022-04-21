@@ -71,7 +71,7 @@ class WorkingHoursRequest(AbstractRequest):
 
     def parseResult(self, response: Response) -> str:
         if response.status_code == 200:
-            strReturn = ""
+            strReturn = str()
             for record in response.json():
                 date = datetime.strptime(record.get('date'), '%Y-%m-%d').date()
                 strReturn += date.strftime('%d/%m/%Y') + '\n'
@@ -79,6 +79,9 @@ class WorkingHoursRequest(AbstractRequest):
                 strReturn += "\tOre fatturate: " + str(record.get('billableHours', "non registrate")) + '\n'
                 strReturn += "\tNote: " + record.get('note', "none") + '\n'
                 strReturn += '\n'
+
+            if not strReturn:
+                strReturn = "Non ci sono ancora consuntivazioni per il progetto corrente"
             return strReturn
         elif response.status_code == 401:
             return AbstractRequest.responseUnauthorized

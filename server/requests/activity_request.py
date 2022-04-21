@@ -89,7 +89,7 @@ class ActivityRequest(AbstractRequest):
         fields = dict()
 
         fields["date"] = self.date.strftime('%Y-%m-%d')
-        fields["billableHours"] = self.billableHours
+        fields["billableHours"] = int(self.billableHours)
         fields["travelHours"] = 0
         fields["billableTravelHours"] = 0
         fields["location"] = self.location
