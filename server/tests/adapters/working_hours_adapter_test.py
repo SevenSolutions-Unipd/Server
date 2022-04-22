@@ -14,6 +14,7 @@ class WorkingHoursAdapterTest(TestCase):
         self.statement = Statement(None)
 
     def test_can_process_working_hours(self):
+        # TU-49
         """Test if this adapter can process a correct instance"""
         wh_statements = ['Quante ore ho consuntivato?', 'Quante ore ho registrato', 'Dimmi il quantitativo di ore che ho fatto']
         for word in wh_statements:
@@ -21,7 +22,8 @@ class WorkingHoursAdapterTest(TestCase):
             response = self.adapter.can_process(self.statement)
             self.assertEqual(response, True)
 
-    def test_cant_process_activity(self):
+    def test_cant_process_working_hours(self):
+        # TU-50
         """Test if this adapter refuse a wrong instance"""
         activity_statements = ['check-out', 'check-in', 'ciao', 'something', 'buonasera']
         for word in activity_statements:
