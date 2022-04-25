@@ -1,9 +1,8 @@
-from unittest import TestCase, mock
-from unittest.mock import Mock, patch
-from chatterbot import ChatBot
-from server import settings
-from server.adapters.check_in_adapter import CheckInAdapter
+from unittest import TestCase
+from unittest.mock import patch
+
 from chatterbot.conversation import Statement
+from server.adapters.check_in_adapter import CheckInAdapter
 
 
 class CheckInAdapterTest(TestCase):

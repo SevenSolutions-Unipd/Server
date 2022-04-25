@@ -1,5 +1,5 @@
 from unittest import TestCase
-import requests
+
 from server.requests.help_request import *
 
 

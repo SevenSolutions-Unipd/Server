@@ -1,8 +1,8 @@
+from datetime import datetime
+
 from requests import Response
 
 from server.requests.abstract_request import AbstractRequest
-from datetime import datetime
-
 from server.utils import utils
 
 

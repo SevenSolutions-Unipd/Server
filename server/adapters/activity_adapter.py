@@ -1,14 +1,12 @@
-import json
 import re
 from datetime import datetime
 
-from chatterbot.logic import LogicAdapter
+import requests
 
+from chatterbot.logic import LogicAdapter
 from server.requests.activity_request import ActivityRequest
 from server.statements.activity_statement import ActivityStatement
 from server.utils.utils import lev_dist
-
-import requests
 
 
 class ActivityAdapter(LogicAdapter):

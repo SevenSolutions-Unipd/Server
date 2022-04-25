@@ -1,9 +1,11 @@
+import re
 from typing import Optional
+
+import requests
 from requests import Response
+
 from server.requests.abstract_request import AbstractRequest
 from server.utils import utils
-import requests
-import re
 
 
 def controlCheckIn(response: Response) -> Optional[str]:

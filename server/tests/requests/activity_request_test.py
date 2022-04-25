@@ -1,5 +1,7 @@
 from unittest import TestCase
+
 import requests
+
 from server.requests.activity_request import *
 
 

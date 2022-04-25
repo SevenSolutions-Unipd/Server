@@ -1,8 +1,9 @@
 from unittest import TestCase
+
 from chatterbot import ChatBot
+from chatterbot.conversation import Statement
 from server import settings
 from server.adapters.check_out_adapter import CheckOutAdapter
-from chatterbot.conversation import Statement
 
 
 class CheckOutAdapterTest(TestCase):

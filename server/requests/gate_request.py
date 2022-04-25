@@ -1,9 +1,10 @@
-from typing import Optional
+import re
+
+import requests
 from requests import Response
+
 from server.requests.abstract_request import AbstractRequest
 from server.utils import utils
-import requests
-import re
 
 
 class GateRequest(AbstractRequest):

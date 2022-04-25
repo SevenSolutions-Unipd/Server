@@ -1,4 +1,5 @@
 from requests import Response
+
 from server.requests.abstract_request import AbstractRequest
 from server.utils import utils
 
@@ -42,8 +43,8 @@ class HelpRequest(AbstractRequest):
                               "guidato nella ricerca scrivimi \"Vorrei sapere quante ore ho consutivato\""
 
     gateHelp = "Per aprire il cancello presso una sede puoi mandarmi un messagio del tipo: " \
-                "\"Vorrei aprire il cancello nella sede di ***\" dove '***' è la città della sede.\n\n" \
-                "Se preferisci essere guidato nel processo scrivimi \"Vorrei aprire il cancello\""
+               "\"Vorrei aprire il cancello nella sede ***\" dove '***' è la città della sede.\n\n" \
+               "Se preferisci essere guidato nel processo scrivimi \"Vorrei aprire il cancello\""
 
     def __init__(self, request: str = None, **kwargs):
         super().__init__(**kwargs)

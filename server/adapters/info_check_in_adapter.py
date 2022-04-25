@@ -1,8 +1,9 @@
+import requests
+
 from chatterbot.logic import LogicAdapter
 from server.requests.check_request import CheckRequest, controlCheckIn
 from server.statements.check_statement import CheckStatement
 from server.utils.utils import lev_dist
-import requests
 
 
 class InfoCheckInAdapter(LogicAdapter):

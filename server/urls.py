@@ -16,8 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
-from server.views import ChatterBotAppView, ChatterBotApiView
+
 from server import settings
+from server.views import ChatterBotAppView, ChatterBotApiView
 
 urlpatterns = [
                   url(r'^$', ChatterBotAppView.as_view(), name='main'),

@@ -1,11 +1,9 @@
-from chatterbot.logic import LogicAdapter
+import requests
 
+from chatterbot.logic import LogicAdapter
 from server.requests.workinghours_request import WorkingHoursRequest
 from server.statements.working_hours_statement import WorkingHoursStatement
-
 from server.utils.utils import lev_dist
-
-import requests
 
 
 class WorkingHoursAdapter(LogicAdapter):

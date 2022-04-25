@@ -1,8 +1,9 @@
 from unittest import TestCase
+
 from chatterbot import ChatBot
+from chatterbot.conversation import Statement
 from server import settings
 from server.adapters.info_check_in_adapter import InfoCheckInAdapter
-from chatterbot.conversation import Statement
 
 
 class InfoCheckInAdapterTest(TestCase):

@@ -1,11 +1,10 @@
+import re
+from datetime import datetime
 from typing import Optional
 
 from requests import Response
 
 from server.requests.abstract_request import AbstractRequest
-from datetime import datetime
-import re
-
 from server.utils import utils
 
 

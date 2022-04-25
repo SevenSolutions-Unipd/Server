@@ -1,9 +1,11 @@
+import re
+
+import requests
+
 from chatterbot.logic import LogicAdapter
 from server.requests.gate_request import GateRequest
 from server.statements.gate_statement import GateStatement
 from server.utils.utils import lev_dist
-import requests
-import re
 
 
 class GateAdapter(LogicAdapter):

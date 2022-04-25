@@ -1,6 +1,6 @@
-from server.tests.base_case import ChatterBotTestCase
-from server.requests.workinghours_request import WorkingHoursRequest
 from server.adapters.msg_notrecognizable_adapter import MessageNotRecognizableAdapter
+from server.requests.workinghours_request import WorkingHoursRequest
+from server.tests.base_case import ChatterBotTestCase
 
 
 class ChatBotTests(ChatterBotTestCase):

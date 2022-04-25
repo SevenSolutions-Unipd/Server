@@ -1,10 +1,11 @@
+import re
+
 import requests
 
 from chatterbot.logic import LogicAdapter
 from server.requests.help_request import HelpRequest
 from server.statements.help_statement import HelpStatement
 from server.utils.utils import lev_dist
-import re
 
 
 class HelpAdapter(LogicAdapter):
