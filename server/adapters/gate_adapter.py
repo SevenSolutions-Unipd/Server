@@ -24,17 +24,18 @@ class GateAdapter(LogicAdapter):
     def process(self, statement, additional_response_selection_parameters=None, **kwargs):
         request = GateRequest(
             kwargs.get("location", None),
-            kwargs.get("device", None)
+            kwargs.get("device", "gate")
         )
 
         response = request.parseUserInput(statement.text, statement.in_response_to, **kwargs)
 
         if request.isReady():
-            url = "https://apibot4me.imolinfo.it/v1/locations/" + request.location + "/devices/" + request.device + "/status"
+            url = "https://apibot4me.imolinfo.it/v1/locations/" \
+                  + request.location + "/devices/" + request.device + "/status/"
 
             headers = {
                 "api_key": kwargs.get("api_key", ""),
-                    "Content-type": 'application/json'
+                "Content-type": 'application/json'
             }
 
             serviceResponse = requests.put(url, headers=headers, json={})

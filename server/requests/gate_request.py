@@ -10,7 +10,7 @@ class GateRequest(AbstractRequest):
     responseLocationWrong = "La sede che hai inserito non esiste!\nIn quale sede vuoi aprire il cancello?"
     responseLocationMissing = "In quale sede vuoi aprire il cancello?"
 
-    def __init__(self, location: str = None, device: str = None, **kwargs):
+    def __init__(self, location: str = None, device: str = "gate", **kwargs):
         super().__init__(**kwargs)
         self.location = location
         self.device = device

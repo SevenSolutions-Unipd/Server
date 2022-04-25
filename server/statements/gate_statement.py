@@ -3,12 +3,12 @@ from server.statements.request_statement import RequestStatement
 
 class GateStatement(RequestStatement):
     __slots__ = (
-        'location'
+        'location',
         'device'
     )
 
     extra_fields = [
-        'location'
+        'location',
         'device'
     ]
 
