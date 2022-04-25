@@ -130,7 +130,7 @@ class CheckRequestTest(TestCase):
     def test_validate_location_not_ok(self):
         # TU-13
         """Test if validateLocation() doesn't recognize an unexisting site"""
-        response = self.request.validateLocation('toronto')
+        response = self.request.validateLocation('XXXXXX')
 
         self.assertEqual(response, False)
 
