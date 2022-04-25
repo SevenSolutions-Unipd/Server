@@ -9,7 +9,8 @@ class HelpRequest(AbstractRequest):
         "Effettuare il check-out",
         "Controllo lo stato del check-in",
         "Consuntivare un'attività",
-        "Recuperare le attività consuntivate"
+        "Recuperare le attività consuntivate",
+        "Aprire il cancello"
     ]
 
     responseRequestMissing = "Quale funzionalità non riesci ad usare? Puoi chiedermi una delle seguenti:\n" \
@@ -18,7 +19,7 @@ class HelpRequest(AbstractRequest):
                              "- 'Controllo lo stato del check-in'\n" \
                              "- 'Consuntivare un'attività'\n" \
                              "- 'Recuperare le attività consuntivate'\n" \
-                             "- ..."
+                             "- 'Aprire il cancello'"
 
     checkinHelp = "Per effettuare il check-in presso una sede puoi mandarmi un messagio del tipo: " \
                   "\"Vorrei fare il check-in nella sede di ***\" dove '***' è la città della sede.\n\n" \
@@ -39,6 +40,10 @@ class HelpRequest(AbstractRequest):
                               "aggiungerlo " \
                               "alla richiesta indicando \"dal gg/mm/aaaa al gg/mm/aaaa\".\n\n Se preferisci essere " \
                               "guidato nella ricerca scrivimi \"Vorrei sapere quante ore ho consutivato\""
+
+    gateHelp = "Per aprire il cancello presso una sede puoi mandarmi un messagio del tipo: " \
+                "\"Vorrei aprire il cancello nella sede di ***\" dove '***' è la città della sede.\n\n" \
+                "Se preferisci essere guidato nel processo scrivimi \"Vorrei aprire il cancello\""
 
     def __init__(self, request: str = None, **kwargs):
         super().__init__(**kwargs)
@@ -75,3 +80,5 @@ class HelpRequest(AbstractRequest):
             return HelpRequest.billActivityHelp
         elif self.request == HelpRequest.availableRequests[4]:
             return HelpRequest.billabledActivitiesHelp
+        elif self.request == HelpRequest.availableRequests[5]:
+            return HelpRequest.gateHelp
