@@ -82,6 +82,9 @@ CHATTERBOT = {
         },
         {
             'import_path': 'server.adapters.activity_adapter.ActivityAdapter'
+        },
+        {
+            'import_path': 'server.adapters.gate_adapter.GateAdapter'
         }
     ],
     'storage_adapter': {

@@ -21,7 +21,7 @@ class GateStatement(RequestStatement):
                  **kwargs):
         super().__init__(text, in_response_to, isRequestDone, **kwargs)
         self.location = location
-        self.device = "Gate"
+        self.device = device
 
     def get_statement_field_names(self):
         return super().get_statement_field_names() + self.extra_fields
