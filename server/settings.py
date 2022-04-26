@@ -9,18 +9,16 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
-from pathlib import Path
 import os
+import sys
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -29,7 +27,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 SECRET_KEY = 'django-insecure-@4k8&q3hq$)ey=fa2wqw!wl8$jczw@#hsj8!l&(8(mh-9cx+9b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,7 +36,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 5 * 60
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chatterbot.ext.django_chatterbot',
-    'server'
+    'server',
 ]
 
 MIDDLEWARE = [
@@ -66,15 +63,34 @@ CHATTERBOT = {
     'name': 'Imola Informatica ChatBot',
     'django_app_name': 'django_chatterbot',
     'logic_adapters': [{
-            'import_path': 'server.adapters.workingHoursAdapter.WorkingHoursAdapter'
+            'import_path': 'server.adapters.working_hours_adapter.WorkingHoursAdapter'
         },
         {
-            'import_path': 'server.adapters.helpAdapter.HelpAdapter'
+            'import_path': 'server.adapters.help_adapter.HelpAdapter'
         },
         {
-            'import_path': 'server.adapters.messageNotRecognizableAdapter.MessageNotRecognizableAdapter'
+            'import_path': 'server.adapters.check_in_adapter.CheckInAdapter'
+        },
+        {
+            'import_path': 'server.adapters.info_check_in_adapter.InfoCheckInAdapter'
+        },
+        {
+            'import_path': 'server.adapters.check_out_adapter.CheckOutAdapter'
+        },
+        {
+            'import_path': 'server.adapters.msg_notrecognizable_adapter.MessageNotRecognizableAdapter'
+        },
+        {
+            'import_path': 'server.adapters.activity_adapter.ActivityAdapter'
+        },
+        {
+            'import_path': 'server.adapters.gate_adapter.GateAdapter'
         }
-    ]
+    ],
+    'storage_adapter': {
+        'import_path': 'chatterbot.storage.SQLStorageAdapter',
+        'read_only': 'True'
+    }
 }
 
 ROOT_URLCONF = 'server.urls'
@@ -82,8 +98,7 @@ ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -98,7 +113,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -108,7 +122,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -139,7 +152,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
