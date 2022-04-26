@@ -4,6 +4,7 @@ from typing import Optional
 
 from requests import Response
 
+import requests
 from server.requests.abstract_request import AbstractRequest
 from server.utils import utils
 
@@ -42,7 +43,8 @@ class WorkingHoursRequest(AbstractRequest):
                 match = re.search(typo, input_statement, re.IGNORECASE).group()
 
                 if sanitizedWords.index(match) + 1 < len(sanitizedWords):
-                    self.project = sanitizedWords[sanitizedWords.index(match) + 1]
+                    if not self.validateProject(sanitizedWords[sanitizedWords.index(match) + 1], **kwargs):
+                        return "Il progetto che hai inserito non esiste!\n\n" + self.responseProjectMissing
                 else:
                     return self.responseProjectMissing
 
@@ -60,8 +62,10 @@ class WorkingHoursRequest(AbstractRequest):
                 return "Richiesta annullata!"
 
             if prev_statement.__contains__(self.responseProjectMissing):
-                self.project = input_statement
-                return "Eseguo azione!"
+                if self.validateProject(input_statement, **kwargs):
+                    return "Eseguo azione!"
+                else:
+                    return "Il progetto che hai inserito non esiste!\n\n" + self.responseProjectMissing
 
     def isReady(self) -> bool:
         if self.project is not None:
@@ -70,7 +74,7 @@ class WorkingHoursRequest(AbstractRequest):
 
     def parseResult(self, response: Response) -> str:
         if response.status_code == 200:
-            strReturn = str()
+            strReturn = "Consuntivazioni progetto " + self.project + ":\n\n"
             for record in response.json():
                 date = datetime.strptime(record.get('date'), '%Y-%m-%d').date()
                 strReturn += date.strftime('%d/%m/%Y') + '\n'
@@ -88,3 +92,28 @@ class WorkingHoursRequest(AbstractRequest):
             return WorkingHoursRequest.responseProjectNotFound
         else:
             return AbstractRequest.responseBad
+
+    def validateProject(self, site: str, **kwargs) -> bool:
+        apiKey = kwargs.get("api_key", None)
+
+        if apiKey is not None:
+            url = "https://apibot4me.imolinfo.it/v1/projects"
+
+            apiKey = kwargs.get("api_key")
+            serviceResponse = requests.get(url, headers={"api_key": apiKey})
+
+            if serviceResponse.status_code == 200:
+                projects = []
+
+                # parse projects
+                for record in serviceResponse.json():
+                    projects.append(record.get('code', None))
+
+                if utils.lev_dist([site], projects):
+                    self.project = utils.lev_dist_str_correct_word([site], projects)
+                    return True
+                else:
+                    return False
+        else:
+            self.project = "NotFound"
+            return True
