@@ -4,7 +4,9 @@ from server.utils.utils import lev_dist
 
 
 class AbstractRequest:
-    responseUnauthorized = "Non sei autorizzato ad accedere a questa risorsa. Per favore effettua il login al link ..."
+    responseUnauthorized = "Non risulti ancora autenticato. Per favore effettua il login sul sito " \
+                           "di <a href=\"https://www.imolainformatica.it/\" target=\"_blank\">Imola Informatica</a> " \
+                            "ed inserisci la chiave di accesso nelle impostazioni!"
     responseBad = "Qualcosa è andato storto! :("
 
     def __init__(self, **kwargs):

@@ -38,7 +38,6 @@ class ChatBotAdapter:
             # request processing already started
             kwargs = session.get("statement")
             kwargs["api_key"] = session["api_key"]
-
             input_statement.in_response_to = kwargs.pop("text")
 
             for adapter in self.chatterbot.logic_adapters:

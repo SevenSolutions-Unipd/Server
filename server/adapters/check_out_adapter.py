@@ -32,7 +32,7 @@ class CheckOutAdapter(LogicAdapter):
             serviceResponse = requests.delete(url, headers={"api_key": apiKey})
 
             if serviceResponse.status_code == 204:
-                response = "Check-out effettuato con successo nella sede " + location
+                response = "Check-out effettuato con successo dalla sede " + location
             else:
                 response = "Errore nel check-out"  # da capire come fare bene
 

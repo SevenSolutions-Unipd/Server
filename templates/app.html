@@ -22,7 +22,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Effettua il login su <a href="https://google.com" target="_blank">Imola Informatica</a>
+                    Effettua il login su <a href="https://www.imolainformatica.it/" target="_blank">Imola Informatica</a>
                     ed inserisci la chiave di accesso!
                 </p>
 
@@ -92,7 +92,9 @@
     function createRow(text, side) {
         const $row = $('<li class="list-group-item ' + side + '"></li>');
         const $pre = $('<pre></pre>');
-        $pre.text(text)
+
+
+        $pre.html(text);
 
         $row.append($pre);
         $chatlog.append($row);
