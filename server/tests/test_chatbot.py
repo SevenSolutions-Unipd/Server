@@ -36,7 +36,7 @@ class ChatBotTests(TestCase):
         # TS-1-F-2
         """Test if the user can receive the authentication link if not authenticated"""
         userInput = "stato accesso"
-        self.session["api_key"] = ""
+        self.session["api_key"] = None
 
         response = self.adapter.getResponse(self.session, userInput)
 
@@ -46,7 +46,7 @@ class ChatBotTests(TestCase):
         # TS-1-F-3, TS-3-F-47
         """Test if the user can receive the authentication link if not authenticated"""
         userInput = "Vorrei sapere le ore consuntivate nel progetto BOT4ME"
-        self.session["api_key"] = ""
+        self.session["api_key"] = None
 
         response = self.adapter.getResponse(self.session, userInput)
 

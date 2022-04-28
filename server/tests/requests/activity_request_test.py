@@ -151,12 +151,18 @@ class ActivityRequestTest(TestCase):
         # TU-34
         """Test if API request return correct content"""
         url = "https://apibot4me.imolinfo.it/v1/projects/BOT4ME/activities/me"
-        apiKey = "12345678-1234-1234-1234-123456789012"
 
-        serviceResponse = requests.get(url, headers={"api_key": apiKey})
+        headers = {
+            "Content-type": 'application/json',
+            "api_key": "12345678-1234-1234-1234-123456789012"
+        }
+
+        self.request = ActivityRequest("BOT4ME", datetime.now(), 8, "Padova", "Testing")
+
+        serviceResponse = requests.post(url, headers=headers, json=[self.request.getBody()])
         response = self.request.parseResult(serviceResponse)
 
-        self.assertEqual(serviceResponse.status_code, 200)
+        self.assertEqual(serviceResponse.status_code, 204)
         self.assertNotEqual(response, ActivityRequest.responseProjectNotFound)
         self.assertNotEqual(response, ActivityRequest.responseUnauthorized)
 
@@ -164,9 +170,15 @@ class ActivityRequestTest(TestCase):
         # TU-35
         """Test if API request return 404, giving wrong project name"""
         url = "https://apibot4me.imolinfo.it/v1/projects/patate/activities/me"
-        apiKey = "12345678-1234-1234-1234-123456789012"
 
-        serviceResponse = requests.get(url, headers={"api_key": apiKey})
+        headers = {
+            "Content-type": 'application/json',
+            "api_key": "12345678-1234-1234-1234-123456789012"
+        }
+
+        self.request = ActivityRequest("patate", datetime.now(), 8, "Padova", "Testing")
+
+        serviceResponse = requests.post(url, headers=headers, json=[self.request.getBody()])
         response = self.request.parseResult(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 404)
@@ -177,7 +189,11 @@ class ActivityRequestTest(TestCase):
         """Test if API request return 401, giving no api key"""
         url = "https://apibot4me.imolinfo.it/v1/projects/patate/activities/me"
 
-        serviceResponse = requests.get(url)
+        headers = {
+            "Content-type": 'application/json',
+        }
+
+        serviceResponse = requests.post(url, headers=headers)
         response = self.request.parseResult(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 401)

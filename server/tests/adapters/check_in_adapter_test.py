@@ -35,4 +35,4 @@ class CheckInAdapterTest(TestCase):
         """Test if this adapter can process an instance with every information"""
         self.statement.text = 'Vorrei fare il check-in in sede IMOLA'
         response = self.adapter.process(self.statement)
-        self.assertEqual(response, "Check-in effettuato con successo nella sede IMOLA")
+        self.assertEqual(response.text, "Check-in effettuato con successo nella sede IMOLA")

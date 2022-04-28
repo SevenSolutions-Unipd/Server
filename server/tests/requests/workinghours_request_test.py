@@ -1,7 +1,4 @@
 from unittest import TestCase
-
-import requests
-
 from server.requests.workinghours_request import *
 
 
@@ -162,9 +159,15 @@ class WorkingHoursRequestTest(TestCase):
         # TU-61
         """Test if API request return correct content"""
         url = "https://apibot4me.imolinfo.it/v1/projects/BOT4ME/activities/me"
-        apiKey = "12345678-1234-1234-1234-123456789012"
 
-        serviceResponse = requests.get(url, headers={"api_key": apiKey})
+        self.request = WorkingHoursRequest("BOT4ME")
+
+        headers = {
+            "Content-type": 'application/json',
+            "api_key": "12345678-1234-1234-1234-123456789012"
+        }
+
+        serviceResponse = requests.get(url, headers=headers)
         response = self.request.parseResult(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 200)
@@ -176,9 +179,13 @@ class WorkingHoursRequestTest(TestCase):
         # TU-62
         """Test if API request return 404, giving wrong project name"""
         url = "https://apibot4me.imolinfo.it/v1/projects/patate/activities/me"
-        apiKey = "12345678-1234-1234-1234-123456789012"
 
-        serviceResponse = requests.get(url, headers={"api_key": apiKey})
+        headers = {
+            "Content-type": 'application/json',
+            "api_key": "12345678-1234-1234-1234-123456789012"
+        }
+
+        serviceResponse = requests.get(url, headers=headers)
         response = self.request.parseResult(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 404)

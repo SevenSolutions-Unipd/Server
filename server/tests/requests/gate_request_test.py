@@ -4,9 +4,8 @@ from server.requests.gate_request import *
 
 
 class GateRequestTest(TestCase):
-    def setUp(self, **kwargs):
+    def setUp(self):
         self.request = GateRequest()
-        kwargs['api_key'] = "12345678-1234-1234-1234-123456789012"
 
     def test_request_not_ready(self):
         # TU-64
@@ -68,13 +67,13 @@ class GateRequestTest(TestCase):
         self.assertEqual(self.request.parseUserInput(input_statement, None), "Eseguo azione!")
         self.assertIsNotNone(self.request.location)
 
-    def test_user_input_first_message_wrong_location(self, **kwargs):
+    def test_user_input_first_message_wrong_location(self):
         # TU-68
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Aprire il cancello in sede toronto"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None, **kwargs), GateRequest.responseLocationWrong)
-        self.assertIsNotNone(self.request.location)
+        self.request.parseUserInput(input_statement, None, api_key="12345678-1234-1234-1234-123456789012")
+        self.assertIsNone(self.request.location)
 
     def test_user_input_only_location(self):
         """Test if message containing only location's name is correctly parsed"""
@@ -121,7 +120,7 @@ class GateRequestTest(TestCase):
     def test_validate_location_not_ok(self):
         # TU-71
         """Test if validateLocation() doesn't recognize an unexisting site"""
-        response = self.request.validateLocation('XXXXXX')
+        response = self.request.validateLocation('XXXXXX', api_key="12345678-1234-1234-1234-123456789012")
 
         self.assertEqual(response, False)
 
