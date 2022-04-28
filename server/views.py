@@ -57,5 +57,5 @@ class ChatterBotApiView(View):
             request.session.create()
 
         return JsonResponse({
-            'text': "Ciao! Io sono Alfredo, il tuo assistente. Se hai bisogno di aiuto scrivimi \"farmacista\" :)",
+            'text': "Ciao! Io sono Alfredo, il tuo assistente. Se hai bisogno di aiuto scrivimi \"aiuto\" :)",
         }, status=200)

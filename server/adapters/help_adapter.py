@@ -13,7 +13,7 @@ class HelpAdapter(LogicAdapter):
         super().__init__(chatbot, **kwargs)
 
     def can_process(self, statement):
-        words = ['aiuto', 'farmacista', 'help', 'come', 'funziona', 'istruzioni', 'operazioni']
+        words = ['aiuto', 'help', 'come', 'funziona', 'istruzioni', 'operazioni']
 
         sanitizedWords = re.sub("[^a-zA-Z0-9 \n./]", ' ', statement.text).split()
 
