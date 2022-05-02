@@ -8,13 +8,13 @@ class CheckRequestTest(TestCase):
         self.request = CheckRequest()
 
     def test_request_not_ready(self):
-        # TU-11
+        # TU-10
         """Test if request is not ready to be processed"""
         self.request.location = None
         self.assertEqual(self.request.isReady(), False)
 
     def test_request_ready(self):
-        # TU-11
+        # TU-10
         """Test if request is ready to be processed"""
         self.request.location = "imola"
         self.assertEqual(self.request.isReady(), True)
@@ -88,7 +88,7 @@ class CheckRequestTest(TestCase):
         self.assertIsNotNone(self.request.location)
 
     def test_response_ok(self):
-        # TU-12
+        # TU-11
         """Test if API request return correct content"""
         url = "https://apibot4me.imolinfo.it/v1/locations/imola/presence"
         apiKey = "12345678-1234-1234-1234-123456789012"
@@ -131,21 +131,21 @@ class CheckRequestTest(TestCase):
         requests.delete("https://apibot4me.imolinfo.it/v1/locations/IMOLA/presence", headers=headers)
 
     def test_validate_location_ok(self):
-        # TU-13
+        # TU-12
         """Test if validateLocation() recognizes an existing site"""
         response = self.request.validateLocation('imola')
 
         self.assertEqual(response, True)
 
     def test_validate_location_not_ok(self):
-        # TU-13
+        # TU-12
         """Test if validateLocation() doesn't recognize an unexisting site"""
         response = self.request.validateLocation('XXXXXX', api_key="12345678-1234-1234-1234-123456789012")
 
         self.assertEqual(response, False)
 
     def test_validate_location_with_small_mispell(self):
-        # TU-10
+        # TU-9
         """Test if validateLocation() recognizes an existing mispelled site"""
         mispelled_location = ['imala', 'inola', 'imolo']
         for word in mispelled_location:

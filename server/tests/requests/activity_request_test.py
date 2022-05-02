@@ -10,7 +10,7 @@ class ActivityRequestTest(TestCase):
         self.request = ActivityRequest()
 
     def test_request_not_ready(self):
-        # TU-24
+        # TU-23
         """Test if request is not ready to be processed"""
         self.request.project = None
         self.request.billableHours = None
@@ -19,7 +19,7 @@ class ActivityRequestTest(TestCase):
         self.assertEqual(self.request.isReady(), False)
 
     def test_request_ready(self):
-        # TU-24
+        # TU-23
         """Test if request is ready to be processed"""
         self.request.project = "BOT4ME"
         self.request.billableHours = 8
@@ -28,7 +28,7 @@ class ActivityRequestTest(TestCase):
         self.assertEqual(self.request.isReady(), True)
 
     def test_request_aborted(self):
-        # TU-25
+        # TU-24
         """Test if request is aborted after user's request to abort operation"""
         abort_statements = ['annulla operazione', 'stop', 'elimina operazione', 'basta']
 
@@ -39,7 +39,7 @@ class ActivityRequestTest(TestCase):
             self.request.isQuitting = False
 
     def test_request_not_aborted(self):
-        # TU-25
+        # TU-24
         """Test if request is not aborted as user doesn't require to abort it"""
         abort_statements = ['something', 'bot4me', 'pomodoro', 'gatto matto']
 
@@ -49,7 +49,7 @@ class ActivityRequestTest(TestCase):
             self.assertNotEqual(response, "Richiesta annullata!")
 
     def test_response_insert_project(self):
-        # TU-26
+        # TU-25
         """Test if request tells the user to insert project"""
         input_statement = "Vorrei inserire un attività"
 
@@ -61,7 +61,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_response_insert_billable_hour(self):
-        # TU-27
+        # TU-26
         """Test if request tells the user to insert billable hours"""
         prev_statement = self.request.responseProjectRequest
         input_statement = "BOT4ME"
@@ -74,7 +74,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_response_insert_location(self):
-        # TU-28
+        # TU-27
         """Test if request tells the user to insert location"""
         prev_statement = self.request.responseHoursToBill
         input_statement = "8"
@@ -87,7 +87,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_wrong_billable_hour_format(self):
-        # TU-29
+        # TU-28
         """Test if request tells the user billable hour wrong format"""
         prev_statement = self.request.responseHoursToBill
         input_statement = "banane"
@@ -100,7 +100,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_response_insert_description(self):
-        # TU-30
+        # TU-29
         """Test if request tells the user to insert notes"""
         prev_statement = self.request.responseLocationRequest
         input_statement = "Padova"
@@ -113,7 +113,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_wrong_location_format(self):
-        # TU-31
+        # TU-30
         """Test if request tells the user location wrong format"""
         prev_statement = self.request.responseLocationRequest
         input_statement = "Padova56"
@@ -127,7 +127,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNone(self.request.description)
 
     def test_insert_activity_with_description(self):
-        # TU-32
+        # TU-31
         """Test if request tells the user to insert description"""
         prev_statement = self.request.responseNotesRequest
         input_statement = "Implementazione di un fantastico bot"
@@ -140,7 +140,7 @@ class ActivityRequestTest(TestCase):
         self.assertIsNotNone(self.request.description)
 
     def test_insert_activity_with_no_description(self):
-        # TU-33
+        # TU-32
         """Test if user skip insert description"""
         prev_statement = self.request.responseNotesRequest
         input_statements = ['avanti', 'niente', 'prosegui', 'skip']
@@ -148,7 +148,7 @@ class ActivityRequestTest(TestCase):
             self.assertEqual(self.request.parseUserInput(word, prev_statement), "Eseguo azione!")
 
     def test_response_ok(self):
-        # TU-34
+        # TU-33
         """Test if API request return correct content"""
         url = "https://apibot4me.imolinfo.it/v1/projects/BOT4ME/activities/me"
 
@@ -167,7 +167,7 @@ class ActivityRequestTest(TestCase):
         self.assertNotEqual(response, ActivityRequest.responseUnauthorized)
 
     def test_response_project_missing(self):
-        # TU-35
+        # TU-34
         """Test if API request return 404, giving wrong project name"""
         url = "https://apibot4me.imolinfo.it/v1/projects/patate/activities/me"
 
@@ -185,7 +185,7 @@ class ActivityRequestTest(TestCase):
         self.assertEqual(response, ActivityRequest.responseProjectNotFound)
 
     def test_response_unauthorized(self):
-        # TU-36
+        # TU-35
         """Test if API request return 401, giving no api key"""
         url = "https://apibot4me.imolinfo.it/v1/projects/patate/activities/me"
 

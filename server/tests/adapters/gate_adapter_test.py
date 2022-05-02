@@ -12,7 +12,7 @@ class CheckInAdapterTest(TestCase):
         self.statement = Statement(None)
 
     def test_can_process_gate_open(self):
-        # TU-1
+        # TU-71
         """Test if this adapter can process a correct instance"""
         check_statements = ['Apri cancello', 'vorrei aprire il cancello']
         for word in check_statements:
@@ -21,7 +21,7 @@ class CheckInAdapterTest(TestCase):
             self.assertEqual(response, True)
 
     def test_cant_process_gate_not_open(self):
-        # TU-2
+        # TU-72
         """Test if this adapter refuse a wrong instance"""
         check_statements = ['gatto matto', 'chiudi cancello', 'ciao', 'something']
         for word in check_statements:
@@ -30,8 +30,9 @@ class CheckInAdapterTest(TestCase):
             self.assertEqual(response, False)
 
     def test_process_gate(self):
-        # TU-9
+        # TI-4
         """Test if this adapter can process an instance with every information"""
-        self.statement.text = 'Apri cancello'
-        response = self.adapter.process(self.statement)
-        self.assertEqual(response.text, "Di quale sede vuoi aprire il cancello?")
+        apikey = '12345678-1234-1234-1234-123456789012'
+        self.statement.text = 'Apri cancello in sede imola'
+        response = self.adapter.process(self.statement, api_key=apikey)
+        self.assertEqual(response.text, "Cancello aperto con successo nella sede IMOLA")

@@ -31,8 +31,9 @@ class CheckInAdapterTest(TestCase):
             self.assertEqual(response, False)
 
     def test_process_check_in(self):
-        # TU-9
+        # TI-1
         """Test if this adapter can process an instance with every information"""
         self.statement.text = 'Vorrei fare il check-in in sede IMOLA'
-        response = self.adapter.process(self.statement)
+        apikey = '12345678-1234-1234-1234-123456789012'
+        response = self.adapter.process(self.statement, api_key=apikey)
         self.assertEqual(response.text, "Check-in effettuato con successo nella sede IMOLA")
