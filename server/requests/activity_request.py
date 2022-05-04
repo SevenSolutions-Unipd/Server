@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import requests
 from requests import Response
 
 from server.requests.abstract_request import AbstractRequest
@@ -37,9 +38,10 @@ class ActivityRequest(AbstractRequest):
                 return "Richiesta annullata!"
 
             if prev_statement.__contains__(ActivityRequest.responseProjectRequest):
-                # TODO: controllare se va bene project con spazi, ...
-                self.project = input_statement
-                return ActivityRequest.responseHoursToBill
+                if self.validateProject(input_statement, **kwargs):
+                    return ActivityRequest.responseHoursToBill
+                else:
+                    return "Il progetto che hai inserito non esiste!\n\n" + ActivityRequest.responseProjectRequest
 
             if prev_statement.__contains__(ActivityRequest.responseHoursToBill):
                 try:
@@ -97,3 +99,28 @@ class ActivityRequest(AbstractRequest):
         fields["note"] = self.description
 
         return fields
+
+    def validateProject(self, site: str, **kwargs) -> bool:
+        apiKey = kwargs.get("api_key", None)
+
+        if apiKey is not None:
+            url = "https://apibot4me.imolinfo.it/v1/projects"
+
+            apiKey = kwargs.get("api_key")
+            serviceResponse = requests.get(url, headers={"api_key": apiKey})
+
+            if serviceResponse.status_code == 200:
+                projects = []
+
+                # parse projects
+                for record in serviceResponse.json():
+                    projects.append(record.get('code', None))
+
+                if utils.lev_dist([site], projects):
+                    self.project = utils.lev_dist_str_correct_word([site], projects)
+                    return True
+                else:
+                    return False
+        else:
+            self.project = "NotFound"
+            return True

@@ -38,7 +38,7 @@ class ChatterBotApiView(View):
         if not request.session.session_key:
             request.session.create()
 
-        if request.headers["Authorization"] is not None: # non funziona senza authorization settata (crasha)
+        if "Authorization" in request.headers and request.headers["Authorization"] is not None:
             request.session["api_key"] = request.headers["Authorization"]
         else:
             request.session["api_key"] = None
@@ -57,5 +57,5 @@ class ChatterBotApiView(View):
             request.session.create()
 
         return JsonResponse({
-            'text': "Ciao! Io sono Alfredo, il tuo assistente. Se hai bisogno di aiuto scrivimi \"farmacista\" :)",
+            'text': "Ciao! Io sono Alfredo, il tuo assistente. Se hai bisogno di aiuto scrivimi \"aiuto\" :)",
         }, status=200)

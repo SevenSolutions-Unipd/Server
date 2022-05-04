@@ -11,7 +11,7 @@ class CheckInAdapter(LogicAdapter):
         super().__init__(chatbot, **kwargs)
 
     def can_process(self, statement):
-        checkWords = ['check-in', 'checkin', 'entrando']
+        checkWords = ['check-in', 'checkin', 'entrando', 'entro']
 
         if not lev_dist(statement.text.split(), checkWords) or "?" in statement.text:
             return False

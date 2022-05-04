@@ -46,7 +46,8 @@ class CheckRequest(AbstractRequest):
             if self.checkQuitting(input_statement):
                 return "Richiesta annullata!"
 
-            if prev_statement.__contains__(self.responseLocationMissing):
+            if prev_statement.__contains__(self.responseLocationMissing)\
+                    or prev_statement.__contains__(self.responseLocationWrong):
                 if self.validateLocation(input_statement, **kwargs):
                     return "Eseguo azione!"
                 else:
@@ -73,7 +74,6 @@ class CheckRequest(AbstractRequest):
         if apiKey is not None:
             url = "https://apibot4me.imolinfo.it/v1/locations"
 
-            apiKey = kwargs.get("api_key")
             serviceResponse = requests.get(url, headers={"api_key": apiKey})
 
             if serviceResponse.status_code == 200:

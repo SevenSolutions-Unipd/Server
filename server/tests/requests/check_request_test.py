@@ -8,13 +8,13 @@ class CheckRequestTest(TestCase):
         self.request = CheckRequest()
 
     def test_request_not_ready(self):
-        # TU-11
+        # TU-10
         """Test if request is not ready to be processed"""
         self.request.location = None
         self.assertEqual(self.request.isReady(), False)
 
     def test_request_ready(self):
-        # TU-11
+        # TU-10
         """Test if request is ready to be processed"""
         self.request.location = "imola"
         self.assertEqual(self.request.isReady(), True)
@@ -72,8 +72,10 @@ class CheckRequestTest(TestCase):
         """Test if request tells the user that it's ready to be processed"""
         input_statement = "Vorrei effettuare il check-in in sede toronto"
 
-        self.assertEqual(self.request.parseUserInput(input_statement, None), CheckRequest.responseLocationWrong)
-        self.assertIsNotNone(self.request.location)
+        apiKey = "12345678-1234-1234-1234-123456789012"
+
+        self.assertEqual(self.request.parseUserInput(input_statement, None, api_key=apiKey), CheckRequest.responseLocationWrong)
+        self.assertIsNone(self.request.location)
 
     def test_user_input_only_location(self):
         """Test if message containing only location's name is correctly parsed"""
@@ -86,7 +88,7 @@ class CheckRequestTest(TestCase):
         self.assertIsNotNone(self.request.location)
 
     def test_response_ok(self):
-        # TU-12
+        # TU-11
         """Test if API request return correct content"""
         url = "https://apibot4me.imolinfo.it/v1/locations/imola/presence"
         apiKey = "12345678-1234-1234-1234-123456789012"
@@ -110,33 +112,40 @@ class CheckRequestTest(TestCase):
         self.assertEqual(response, CheckRequest.responseUnauthorized)
 
     def test_control_check_in(self):
-        # TU-4 (da sistemare)
+        # TU-4
         """Test if request tell the user his actual location, in case he checked-in"""
-        url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
-        apiKey = "12345678-1234-1234-1234-123456789012"
+        headers = {
+            "Content-type": 'application/json',
+            "api_key": "12345678-1234-1234-1234-123456789012"
+        }
 
-        serviceResponse = requests.get(url, headers={"api_key": apiKey})
+        requests.post("https://apibot4me.imolinfo.it/v1/locations/IMOLA/presence", headers=headers)
+
+        url = "https://apibot4me.imolinfo.it/v1/locations/presence/me"
+        serviceResponse = requests.get(url, headers=headers)
         response = controlCheckIn(serviceResponse)
 
         self.assertEqual(serviceResponse.status_code, 200)
-        self.assertEqual(response, serviceResponse.json()[0].get('location', None))
+        self.assertEqual(response, "IMOLA")
+
+        requests.delete("https://apibot4me.imolinfo.it/v1/locations/IMOLA/presence", headers=headers)
 
     def test_validate_location_ok(self):
-        # TU-13
+        # TU-12
         """Test if validateLocation() recognizes an existing site"""
         response = self.request.validateLocation('imola')
 
         self.assertEqual(response, True)
 
     def test_validate_location_not_ok(self):
-        # TU-13
+        # TU-12
         """Test if validateLocation() doesn't recognize an unexisting site"""
-        response = self.request.validateLocation('XXXXXX')
+        response = self.request.validateLocation('XXXXXX', api_key="12345678-1234-1234-1234-123456789012")
 
         self.assertEqual(response, False)
 
     def test_validate_location_with_small_mispell(self):
-        # TU-10
+        # TU-9
         """Test if validateLocation() recognizes an existing mispelled site"""
         mispelled_location = ['imala', 'inola', 'imolo']
         for word in mispelled_location:
