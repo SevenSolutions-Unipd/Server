@@ -73,7 +73,7 @@ class WorkingHoursRequest(AbstractRequest):
         return False
 
     def parseResult(self, response: Response) -> str:
-        if response.status_code == 200:
+        if response.status_code == 200 and len(response.json()) > 0:
             strReturn = "Consuntivazioni progetto " + self.project + ":\n\n"
             for record in response.json():
                 date = datetime.strptime(record.get('date'), '%Y-%m-%d').date()
@@ -88,7 +88,7 @@ class WorkingHoursRequest(AbstractRequest):
             return strReturn
         elif response.status_code == 401:
             return AbstractRequest.responseUnauthorized
-        elif response.status_code == 404:
+        elif response.status_code == 404 or len(response.json()) == 0:
             return WorkingHoursRequest.responseProjectNotFound
         else:
             return AbstractRequest.responseBad

@@ -3,6 +3,8 @@ from unittest.mock import patch
 
 from chatterbot.conversation import Statement
 from server.adapters.help_adapter import HelpAdapter
+from server.requests.help_request import HelpRequest
+from server.statements.help_statement import HelpStatement
 
 
 class HelpAdapterTest(TestCase):
@@ -15,7 +17,7 @@ class HelpAdapterTest(TestCase):
     def test_can_process_help(self):
         # TU-36
         """Test if this adapter can process a correct instance"""
-        help_statements = ['Dammi un aiuto', 'farmacista', 'help', 'come', 'funziona', 'istruzioni']
+        help_statements = ['Dammi un aiuto', 'help', 'come', 'funziona', 'istruzioni']
         for word in help_statements:
             self.statement.text = word
             response = self.adapter.can_process(self.statement)
@@ -30,3 +32,10 @@ class HelpAdapterTest(TestCase):
             response = self.adapter.can_process(self.statement)
             self.assertEqual(response, False)
 
+    def test_process_help_ok(self):
+        # NEW TEST
+        """Test if this adapter can process an instance with every information"""
+        apikey = '12345678-1234-1234-1234-123456789012'
+        self.statement = HelpStatement("Effettuare il check-in")
+        response = self.adapter.process(self.statement, api_key=apikey, request="Effettuare il check-in")
+        self.assertEqual(response.text, HelpRequest.checkinHelp)
