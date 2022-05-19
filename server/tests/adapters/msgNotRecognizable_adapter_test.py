@@ -18,13 +18,13 @@ class MessageNotRecognizableAdapterTest(TestCase):
         self.statement = Statement(None)
 
     def test_can_process_msg_not_recognizable(self):
-        # NEW TEST
+        # TU-75
         """Test if this adapter can process a correct instance"""
         response = self.adapter.can_process(self.statement)
         self.assertEqual(response, True)
 
     def test_process_msg_not_recognizable(self):
-        # NEW TEST
+        # TI-9
         """Test if this adapter can process an instance with every information"""
         response = self.adapter.process(self.statement, api_key="")
         self.assertEqual(response.text, MessageNotRecognizableAdapter.notRecognizableMessage)

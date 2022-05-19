@@ -41,7 +41,7 @@ class WorkingHoursAdapterTest(TestCase):
         self.assertEqual(response.text, "A quale progetto ti stai riferendo?")
 
     def test_process_working_hours_complete(self):
-        # NEW TEST
+        # TI-6
         """Test if this adapter can process an instance with every information"""
         apikey = '12345678-1234-1234-1234-123456789012'
         response = self.adapter.process(self.statement, api_key=apikey, project="BOT4ME")

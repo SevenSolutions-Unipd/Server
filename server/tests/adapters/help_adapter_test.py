@@ -33,7 +33,7 @@ class HelpAdapterTest(TestCase):
             self.assertEqual(response, False)
 
     def test_process_help_ok(self):
-        # NEW TEST
+        # TI-8
         """Test if this adapter can process an instance with every information"""
         apikey = '12345678-1234-1234-1234-123456789012'
         self.statement = HelpStatement("Effettuare il check-in")

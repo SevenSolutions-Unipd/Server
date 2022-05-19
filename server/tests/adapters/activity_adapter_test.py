@@ -45,7 +45,7 @@ class ActivityAdapterTest(TestCase):
         self.assertEqual(response.text, "Eseguo azione!")
 
     def test_process_activity_bis(self):
-        # NEW TEST
+        # TI-3
         """Test if this adapter process an instance with every information"""
         apikey = '12345678-1234-1234-1234-123456789012'
 
@@ -54,7 +54,7 @@ class ActivityAdapterTest(TestCase):
         self.assertEqual(response.text, ActivityRequest.responseActivityBilledSuccessfully)
 
     def test_process_activity_undo_operation(self):
-        # NEW TEST
+        # TI-3
         """Test if this adapter process an instance with every information"""
         apikey = '12345678-1234-1234-1234-123456789012'
         self.statement.text = "annulla"
